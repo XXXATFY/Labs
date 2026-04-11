@@ -1,0 +1,58 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega32"</DEVICE>
+ <WORKING_DIR>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\Debug\AssemblerApplication1.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>AssemblerApplication1.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>AssemblerApplication1.map</FILE>
+  <FILE>AssemblerApplication1.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <reset><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>97</LINE></reset>
+  <EXT_INT0><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>338</LINE></EXT_INT0>
+  <EXT_INT1><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>352</LINE></EXT_INT1>
+  <delay_10ms><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>24</LINE></delay_10ms>
+  <delay_10ms_sb><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>27</LINE></delay_10ms_sb>
+  <delay><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>43</LINE></delay>
+  <delay_sb><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>45</LINE></delay_sb>
+  <eeprom_read><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>55</LINE></eeprom_read>
+  <eeprom_read_ok><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>73</LINE></eeprom_read_ok>
+  <eeprom_write><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>77</LINE></eeprom_write>
+  <mode_show><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>297</LINE></mode_show>
+  <state_show><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>305</LINE></state_show>
+  <calc_negative_y><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>321</LINE></calc_negative_y>
+  <loop><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>147</LINE></loop>
+  <check_input_start><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>156</LINE></check_input_start>
+  <normal_work><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>171</LINE></normal_work>
+  <read_number><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>184</LINE></read_number>
+  <set_mode_1><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>237</LINE></set_mode_1>
+  <set_mode_2><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>250</LINE></set_mode_2>
+  <set_mode_3><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>263</LINE></set_mode_3>
+  <read_number_done><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>218</LINE></read_number_done>
+  <read_number_capture><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>198</LINE></read_number_capture>
+  <read_number_done_by_pd7_release><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>215</LINE></read_number_done_by_pd7_release>
+  <show><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>227</LINE></show>
+  <set_negative_mod_1><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>244</LINE></set_negative_mod_1>
+  <set_negative_mod_2><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>257</LINE></set_negative_mod_2>
+  <set_negative_mod_3><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>270</LINE></set_negative_mod_3>
+  <mode_inc><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>279</LINE></mode_inc>
+  <mode_inc_return><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>284</LINE></mode_inc_return>
+  <mode_dec><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>288</LINE></mode_dec>
+  <mode_dec_skip><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>292</LINE></mode_dec_skip>
+  <calc_negative_y_return><FILE>D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>330</LINE></calc_negative_y_return>
+ </LABELS>
+</ASSEMBLER_INFO>

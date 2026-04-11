@@ -1,0 +1,363 @@
+.def TMP        = R20	; Регистр с временными значениями
+.def VAR_Y      = R22	; Значение y
+.def STATE      = R23	; Состояние гирлянды 1\0
+.def MODE       = R24 	; Режим работы гирлянды
+.def VAL1       = R25 	; Значение выводимое на порт PORTA
+.def VAL2       = R19 	; Значение выводимое на порт PORTB
+.def NEG_VAR_Y  = R18	; Прямой код y
+.def LAST_Y     = R17	; Прошлое значение Y
+.def INPUT_LOCK = R26	; Блокировка ввода до отпуска всех кнопок ввод
+
+.equ EE_MODE_ADDR = 0x00
+
+.org $000 
+   JMP reset
+.org INT0addr
+   JMP EXT_INT0
+.org INT1addr
+   JMP EXT_INT1
+
+
+; =====================================================
+; ЗАДЕРЖКА 10 мс
+; =====================================================
+delay_10ms:
+   LDI  R30, 193
+   LDI  R29, 101
+delay_10ms_sb:
+   NOP
+   DEC  R29
+   NOP
+   BRNE delay_10ms_sb
+   INC  R30
+   BRNE delay_10ms_sb
+   NOP
+   NOP
+   NOP
+   NOP
+   RET
+
+; =====================================================
+; ЗАДЕРЖКА 250 мс (25 раз по 10 мс)
+; =====================================================
+delay:
+   LDI  TMP, 25         ; Повторяет delay 25 раз 
+delay_sb:
+   CALL delay_10ms
+   DEC  TMP
+   BRNE delay_sb
+   RET
+
+
+; =====================================================
+; EEPROM
+; =====================================================
+eeprom_read:
+   SBIC EECR, EEWE
+   RJMP eeprom_read
+
+   CLR TMP
+   OUT EEARH, TMP
+   OUT EEARL, TMP
+
+   SBI EECR, EERE
+   IN  MODE, EEDR
+
+   CPI MODE, 0x01
+   BREQ eeprom_read_ok
+   CPI MODE, 0x02
+   BREQ eeprom_read_ok
+   CPI MODE, 0x03
+   BREQ eeprom_read_ok
+   LDI MODE, 0x01
+eeprom_read_ok:
+   RET
+
+
+eeprom_write:
+   SBIC EECR, EEWE
+   RJMP eeprom_write
+
+   CLR TMP
+   OUT EEARH, TMP
+   OUT EEARL, TMP
+   OUT EEDR, MODE
+
+   IN  TMP, SREG
+   CLI
+   SBI EECR, EEMWE
+   SBI EECR, EEWE
+   OUT SREG, TMP
+   RET
+
+
+; =====================================================
+; RESET
+; =====================================================
+reset:
+   ; Настройка стека
+   LDI  TMP, HIGH(RAMEND)
+   OUT  SPH, TMP  
+   LDI  TMP, LOW(RAMEND)
+   OUT  SPL, TMP 
+
+   ; PORTC - вход
+   CLR  TMP
+   OUT  DDRC, TMP
+   OUT  PORTC, TMP
+   
+   ; PORTD: PD0,PD1,PD4,PD5,PD6 - выход
+   ; PD2,PD3,PD7 - вход
+   LDI  TMP, 0x73
+   OUT  DDRD, TMP
+   CLR  TMP
+   OUT  PORTD, TMP
+   
+   ; PORTA, PORTB - выход
+   SER  TMP
+   OUT  DDRA, TMP
+   OUT  DDRB, TMP 
+   
+   ; начальные значения
+   LDI VAR_Y, 0x71
+   LDI INPUT_LOCK, 0x00
+   LDI STATE, 0x00
+
+   ; MODE читаем из EEPROM
+   CALL eeprom_read
+
+   CALL mode_show
+   CALL state_show
+   CALL calc_negative_y
+   
+   ; INT0 и INT1
+   LDI R16, 0x0F
+   OUT MCUCR, R16
+
+   ; разрешение INT0, INT1
+   LDI R16, 0xC0
+   OUT GICR, R16
+   OUT GIFR, R16
+   SEI
+   
+
+; =====================================================
+; ОСНОВНОЙ ЦИКЛ
+; =====================================================
+loop:
+   ; если PD7 отпущена - снять блокировку повторного входа
+   IN   TMP, PIND
+   ANDI TMP, 0b10000000
+   CPI  TMP, 0b00000000
+   BRNE check_input_start
+
+   CLR  INPUT_LOCK
+
+check_input_start:
+   ; если уже были в режиме ввода и PD7 ещё держат - не входить повторно
+   CPI  INPUT_LOCK, 0x01
+   BREQ normal_work
+
+   ; если PD7 нажата - войти в режим ввода
+   IN   TMP, PIND
+   ANDI TMP, 0b10000000
+   CPI  TMP, 0b10000000
+   BRNE normal_work
+
+   CALL read_number
+   LDI  INPUT_LOCK, 0x01
+   RJMP loop
+
+normal_work:
+   CPI  MODE, 0x01
+   BREQ set_mode_1
+   CPI  MODE, 0x02
+   BREQ set_mode_2
+   CPI  MODE, 0x03
+   BREQ set_mode_3
+   RJMP loop
+
+
+; =====================================================
+; ВВОД Y
+; =====================================================
+read_number:
+
+   CLR LAST_Y
+   ; проверяем, нажата ли ещё PD7
+   IN   TMP, PIND
+   ANDI TMP, 0b10000000
+   CPI  TMP, 0b10000000
+   BRNE read_number_done
+
+   ; ждём, пока PORTC != 0
+   IN   TMP, PINC
+   CPI  TMP, 0x00
+   BREQ read_number
+   
+read_number_capture:
+   CALL delay
+    
+   IN   TMP, PINC
+   CPI  TMP, 0x00
+   BREQ read_number_done
+   
+   MOV  LAST_Y, TMP
+   
+   ; проверяем, нажата ли ещё PD7
+   IN   TMP, PIND
+   ANDI TMP, 0b10000000
+   CPI  TMP, 0b10000000
+   BRNE read_number_done_by_pd7_release
+
+   RJMP read_number_capture
+   
+read_number_done_by_pd7_release:
+   IN   TMP, PINC
+   MOV  LAST_Y, TMP
+read_number_done:
+   MOV  VAR_Y, LAST_Y
+   CALL calc_negative_y
+   RET
+   
+
+; =====================================================
+; ВЫВОД
+; =====================================================
+show:
+   OUT PORTA, VAL1
+   OUT PORTB, VAL2
+   CALL delay
+   LDI TMP, 0x01
+   EOR STATE, TMP
+   CALL state_show
+   RJMP loop
+   
+
+set_mode_1:
+   CPI STATE, 0x00
+   BRNE set_negative_mod_1
+   LDI VAL1, 0xFF
+   LDI VAL2, 0x00
+   RJMP show
+
+set_negative_mod_1:
+   LDI VAL1, 0x00
+   LDI VAL2, 0xFF
+   RJMP show
+
+
+set_mode_2:
+   CPI STATE, 0x00
+   BRNE set_negative_mod_2
+   LDI VAL1, 0xAA
+   LDI VAL2, 0x55
+   RJMP show
+
+set_negative_mod_2:
+   LDI VAL1, 0x55
+   LDI VAL2, 0xAA
+   RJMP show
+
+
+set_mode_3:
+   CPI STATE, 0x00
+   BRNE set_negative_mod_3
+   MOV VAL1, VAR_Y
+   MOV VAL2, NEG_VAR_Y
+   RJMP show
+
+set_negative_mod_3:
+   MOV VAL1, NEG_VAR_Y
+   MOV VAL2, VAR_Y
+   RJMP show
+   
+
+; =====================================================
+; СМЕНА РЕЖИМА
+; =====================================================
+mode_inc:
+   INC MODE
+   CPI MODE, 0x04
+   BRNE mode_inc_return
+   LDI MODE, 0x01
+mode_inc_return:
+   CALL mode_show
+   RET
+  
+mode_dec:
+   DEC MODE
+   BRNE mode_dec_skip
+   LDI MODE, 0x03
+mode_dec_skip:
+   CALL mode_show
+   RET
+
+
+mode_show:
+   IN  TMP, PORTD
+   ANDI TMP, 0b11111100
+   OR  TMP, MODE
+   OUT PORTD, TMP
+   RET
+
+
+state_show:
+   IN  TMP, PORTD
+   ANDI TMP, 0b11101111
+   MOV R16, STATE
+   LSL R16
+   LSL R16
+   LSL R16
+   LSL R16
+   OR  TMP, R16
+   OUT PORTD, TMP
+   RET
+   
+
+; =====================================================
+; ВЫЧИСЛЕНИЕ -Y
+; =====================================================
+calc_negative_y:
+   MOV  TMP, VAR_Y
+   ANDI TMP, 0x7F
+   BREQ calc_negative_y_return
+   LDI  TMP, 0x80
+   MOV  NEG_VAR_Y, VAR_Y
+   EOR  NEG_VAR_Y, TMP
+   RET
+
+calc_negative_y_return:
+   LDI NEG_VAR_Y, 0x00
+   RET
+   
+
+; =====================================================
+; ПРЕРЫВАНИЯ
+; =====================================================
+EXT_INT0: 
+   PUSH TMP
+   IN   TMP, SREG
+   PUSH TMP
+
+   CALL mode_inc
+   CALL eeprom_write
+
+   POP  TMP
+   OUT  SREG, TMP
+   POP  TMP
+   RETI
+ 
+
+EXT_INT1:
+   PUSH TMP
+   IN   TMP, SREG
+   PUSH TMP
+
+   CALL mode_dec
+   CALL eeprom_write
+   
+   POP  TMP
+   OUT  SREG, TMP
+   POP  TMP
+   RETI
