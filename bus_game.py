@@ -99,8 +99,8 @@ class BusSeatingGame:
             for j, seat_b in enumerate(self.seats):
                 if i == j:
                     continue
-                dist = abs(seat_a["row"] - seat_b["row"]) + abs(seat_a["col"] - seat_b["col"])
-                if dist == 1:
+                manhattan_distance = abs(seat_a["row"] - seat_b["row"]) + abs(seat_a["col"] - seat_b["col"])
+                if manhattan_distance == 1:
                     neighbors[i].append(j)
         return neighbors
 
@@ -245,7 +245,7 @@ class BusSeatingGame:
             return
 
         if self.selected_bonus == "earplugs":
-            if "music" in target.properties and self.bonuses["earplugs"] > 0:
+            if "music" in target.properties:
                 target.properties.remove("music")
                 self.bonuses["earplugs"] -= 1
                 self.message = f"Беруши применены к {target.pid}."
@@ -253,7 +253,7 @@ class BusSeatingGame:
                 self.message = "Беруши не сработали."
 
         elif self.selected_bonus == "deodorant":
-            if "smelly" in target.properties and self.bonuses["deodorant"] > 0:
+            if "smelly" in target.properties:
                 target.properties.remove("smelly")
                 self.bonuses["deodorant"] -= 1
                 self.message = f"Дезодорант применён к {target.pid}."
@@ -261,7 +261,7 @@ class BusSeatingGame:
                 self.message = "Дезодорант не сработал."
 
         elif self.selected_bonus == "relax_card":
-            if target.requirements and self.bonuses["relax_card"] > 0:
+            if target.requirements:
                 removable = None
                 for k in ("alone", "window", "quiet", "no_smell"):
                     if k in target.requirements:
