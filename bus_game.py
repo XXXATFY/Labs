@@ -262,12 +262,17 @@ class BusSeatingGame:
 
         elif self.selected_bonus == "relax_card":
             if target.requirements and self.bonuses["relax_card"] > 0:
+                removable = None
                 for k in ("alone", "window", "quiet", "no_smell"):
                     if k in target.requirements:
-                        target.requirements.remove(k)
+                        removable = k
                         break
-                self.bonuses["relax_card"] -= 1
-                self.message = f"Талон спокойствия снижает требования {target.pid}."
+                if removable:
+                    target.requirements.remove(removable)
+                    self.bonuses["relax_card"] -= 1
+                    self.message = f"Талон спокойствия снижает требования {target.pid}."
+                else:
+                    self.message = "Талон спокойствия не сработал."
             else:
                 self.message = "Талон спокойствия не сработал."
 
@@ -496,7 +501,7 @@ class BusSeatingGame:
         sub = self.font.render(self.message or "", True, TEXT)
         self.screen.blit(sub, sub.get_rect(center=(WIDTH // 2, 280)))
 
-        retry = self.font.render("Нажми ENTER, чтобы в меню", True, TEXT)
+        retry = self.font.render("Нажми ENTER, чтобы вернуться в меню", True, TEXT)
         self.screen.blit(retry, retry.get_rect(center=(WIDTH // 2, 360)))
 
     def run(self):
