@@ -1,11 +1,12 @@
 
-AVRASM ver. 2.2.8  C:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm Mon Apr 13 17:25:10 2026
+AVRASM ver. 2.2.8  C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm Mon Apr 13 16:19:42 2026
 
 [builtin](2): Including file 'C:/Programs\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc'
-C:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm(9): warning: Register r26 already defined by the .DEF directive
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(1): Including file 'C:/Programs\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc'
 [builtin](2): Including file 'C:/Programs\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc'
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(1): Including file 'C:/Programs\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc'
                                  
-                                 .def TMP        = R20	; ������� � ���������� ����������
+                                 .include "m32def.inc"
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega32.xml ************
                                  ;*************************************************************************
@@ -821,366 +822,706 @@ C:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm(9): warni
                                  #endif  /* _M32DEF_INC_ */
                                  
                                  
-                                 .def VAR_Y      = R22	; �������� y
-                                 .def STATE      = R23	; ��������� �������� 1\0
-                                 .def MODE       = R24 	; ����� ������ ��������
-                                 .def VAL1       = R25 	; �������� ��������� �� ���� PORTA
-                                 .def VAL2       = R19 	; �������� ��������� �� ���� PORTB
-                                 .def NEG_VAR_Y  = R18	; ������ ��� y
-                                 .def LAST_Y     = R17	; ������� �������� Y
-                                 .def INPUT_LOCK = R26	; ���������� ����� �� ������� ���� ������ ����
+                                 
+                                 ;***** Created: 2011-02-09 12:03 ******* Source: ATmega32.xml ************
+                                 ;*************************************************************************
+                                 ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+                                 ;* 
+                                 ;* Number            : AVR000
+                                 ;* File Name         : "m32def.inc"
+                                 ;* Title             : Register/Bit Definitions for the ATmega32
+                                 ;* Date              : 2011-02-09
+                                 ;* Version           : 2.35
+                                 ;* Support E-mail    : avr@atmel.com
+                                 ;* Target MCU        : ATmega32
+                                 ;* 
+                                 ;* DESCRIPTION
+                                 ;* When including this file in the assembly program file, all I/O register 
+                                 ;* names and I/O register bit names appearing in the data book can be used.
+                                 ;* In addition, the six registers forming the three data pointers X, Y and 
+                                 ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+                                 ;* SRAM is also defined 
+                                 ;* 
+                                 ;* The Register names are represented by their hexadecimal address.
+                                 ;* 
+                                 ;* The Register Bit names are represented by their bit number (0-7).
+                                 ;* 
+                                 ;* Please observe the difference in using the bit names with instructions
+                                 ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
+                                 ;* (skip if bit in register set/cleared). The following example illustrates
+                                 ;* this:
+                                 ;* 
+                                 ;* in    r16,PORTB             ;read PORTB latch
+                                 ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
+                                 ;* out   PORTB,r16             ;output to PORTB
+                                 ;* 
+                                 ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
+                                 ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
+                                 ;* rjmp  TOV0_is_set           ;jump if set
+                                 ;* ...                         ;otherwise do something else
+                                 ;*************************************************************************
+                                 
+                                 #ifndef _M32DEF_INC_
+                                 
+                                 #endif  /* _M32DEF_INC_ */
                                  
                                  
-                                 .org $000 
-000000 940c 0034                    JMP reset
-                                 .org INT0addr
-000002 940c 00c8                    JMP EXT_INT0
-                                 .org INT1addr
-000004 940c 00d3                    JMP EXT_INT1
+                                 ;=========================================================
+                                 ; ATmega32, 8 MHz
+                                 ; ЛР3, вариант 1
+                                 ; Секундомер MM.SS
+                                 ;
+                                 ; PD2 / INT0  - старт / стоп / возобновление
+                                 ; PD0         - сохранить текущее значение (только при run)
+                                 ; PD1         - просмотр сохраненных значений (только при stop)
+                                 ; PD3 / INT1  - стоп, сброс в 00.00, очистка сохранений
+                                 ;
+                                 ; Схема:
+                                 ;   PORTC    -> сегменты a,b,c,d,e,f,g,dp
+                                 ;   PORTA.0..3 -> выбор разрядов
+                                 ;   Индикатор общий анод
+                                 ;=========================================================
                                  
+                                 ;---------------------------------------------------------
+                                 ; Константы
+                                 ;---------------------------------------------------------
+                                 .equ T0_PRELOAD = 131        ; 1 ms: 8 MHz / 64 => 125 ticks => 256-125=131
+                                 .equ MAX_SAVES  = 8
                                  
-                                 ; =====================================================
-                                 ; �������� 10 ��
-                                 ; =====================================================
-                                 delay_10ms:
-000006 ece1                         LDI  R30, 193
-000007 e6d5                         LDI  R29, 101
-                                 delay_10ms_sb:
-000008 0000                         NOP
-000009 95da                         DEC  R29
-00000a 0000                         NOP
-00000b f7e1                         BRNE delay_10ms_sb
-00000c 95e3                         INC  R30
-00000d f7d1                         BRNE delay_10ms_sb
-00000e 0000                         NOP
-00000f 0000                         NOP
-000010 0000                         NOP
-000011 0000                         NOP
-000012 9508                         RET
+                                 ;---------------------------------------------------------
+                                 ; Рабочие регистры
+                                 ;---------------------------------------------------------
+                                 .def t0 = r16
+                                 .def t1 = r17
+                                 .def t2 = r18
+                                 .def t3 = r19
+                                 .def t4 = r20
+                                 .def t5 = r21
                                  
-                                 ; =====================================================
-                                 ; �������� 250 �� (25 ��� �� 10 ��)
-                                 ; =====================================================
-                                 delay:
-000013 e149                         LDI  TMP, 25
-                                 delay_sb:
-000014 940e 0006                    CALL delay_10ms
-000016 954a                         DEC  TMP
-000017 f7e1                         BRNE delay_sb
-000018 9508                         RET
+                                 ;---------------------------------------------------------
+                                 ; SRAM
+                                 ;---------------------------------------------------------
+                                 .dseg
+000060                           ms_lo:          .byte 1
+000061                           ms_hi:          .byte 1
                                  
+000062                           run_flag:       .byte 1      ; 0 - стоп, 1 - идет
+000063                           disp_mode:      .byte 1      ; 0 - текущее время, 1 - сохраненное
+000064                           view_index:     .byte 1      ; индекс просматриваемого сохранения
+000065                           save_count:     .byte 1      ; сколько сохранено
+000066                           mux_pos:        .byte 1      ; 0..3
                                  
-                                 ; =====================================================
-                                 ; EEPROM
-                                 ; =====================================================
-                                 eeprom_read:
-000019 99e1                         SBIC EECR, EEWE
-00001a cffe                         RJMP eeprom_read
+000067                           btn0_prev:      .byte 1      ; 1 - отпущена, 0 - нажата
+000068                           btn1_prev:      .byte 1
                                  
-00001b 2744                         CLR TMP
-00001c bb4f                         OUT EEARH, TMP
-00001d bb4e                         OUT EEARL, TMP
+000069                           cur_m10:        .byte 1
+00006a                           cur_m1:         .byte 1
+00006b                           cur_s10:        .byte 1
+00006c                           cur_s1:         .byte 1
                                  
-00001e 9ae0                         SBI EECR, EERE
-00001f b38d                         IN  MODE, EEDR
+00006d                           disp_m10:       .byte 1
+00006e                           disp_m1:        .byte 1
+00006f                           disp_s10:       .byte 1
+000070                           disp_s1:        .byte 1
                                  
-000020 3081                         CPI MODE, 0x01
-000021 f029                         BREQ eeprom_read_ok
-000022 3082                         CPI MODE, 0x02
-000023 f019                         BREQ eeprom_read_ok
-000024 3083                         CPI MODE, 0x03
-000025 f009                         BREQ eeprom_read_ok
-000026 e081                         LDI MODE, 0x01
-                                 eeprom_read_ok:
-000027 9508                         RET
+000071                           save_buf:       .byte 32     ; 8 значений * 4 цифры
                                  
+                                 ;---------------------------------------------------------
+                                 ; CODE
+                                 ;---------------------------------------------------------
+                                 .cseg
                                  
-                                 eeprom_write:
-000028 99e1                         SBIC EECR, EEWE
-000029 cffe                         RJMP eeprom_write
+                                 ;---------------------------------------------------------
+                                 ; Таблица векторов
+                                 ;---------------------------------------------------------
+                                 .org 0x0000
+000000 c01f                          rjmp RESET
+                                 .org 0x0002
+000002 c05c                          rjmp INT0_ISR
+                                 .org 0x0004
+000004 c06d                          rjmp INT1_ISR
+                                 .org 0x0006
+000006 9518                          reti
+                                 .org 0x0008
+000008 9518                          reti
+                                 .org 0x000A
+00000a 9518                          reti
+                                 .org 0x000C
+00000c 9518                          reti
+                                 .org 0x000E
+00000e 9518                          reti
+                                 .org 0x0010
+000010 9518                          reti
+                                 .org 0x0012
+000012 9518                          reti
+                                 .org 0x0014
+000014 c08d                          rjmp TIMER0_OVF_ISR
                                  
-00002a 2744                         CLR TMP
-00002b bb4f                         OUT EEARH, TMP
-00002c bb4e                         OUT EEARL, TMP
-00002d bb8d                         OUT EEDR, MODE
+                                 .org 0x0020
                                  
-00002e b74f                         IN  TMP, SREG
-00002f 94f8                         CLI
-000030 9ae2                         SBI EECR, EEMWE
-000031 9ae1                         SBI EECR, EEWE
-000032 bf4f                         OUT SREG, TMP
-000033 9508                         RET
-                                 
-                                 
-                                 ; =====================================================
+                                 ;=========================================================
                                  ; RESET
-                                 ; =====================================================
-                                 reset:
-                                    ; ��������� �����
-000034 e048                         LDI  TMP, HIGH(RAMEND)
-000035 bf4e                         OUT  SPH, TMP  
-000036 e54f                         LDI  TMP, LOW(RAMEND)
-000037 bf4d                         OUT  SPL, TMP 
+                                 ;=========================================================
+                                 RESET:
+                                     ; Стек
+000020 e008                          ldi t0, high(RAMEND)
+000021 bf0e                          out SPH, t0
+000022 e50f                          ldi t0, low(RAMEND)
+000023 bf0d                          out SPL, t0
                                  
-                                    ; PORTC - ����
-000038 2744                         CLR  TMP
-000039 bb44                         OUT  DDRC, TMP
-00003a bb45                         OUT  PORTC, TMP
-                                    
-                                    ; PORTD: PD0,PD1,PD4,PD5,PD6 - �����
-                                    ; PD2,PD3,PD7 - ����
-00003b e743                         LDI  TMP, 0x73
-00003c bb41                         OUT  DDRD, TMP
-00003d 2744                         CLR  TMP
-00003e bb42                         OUT  PORTD, TMP
-                                    
-                                    ; PORTA, PORTB - �����
-00003f ef4f                         SER  TMP
-000040 bb4a                         OUT  DDRA, TMP
-000041 bb47                         OUT  DDRB, TMP 
-                                    
-                                    ; ��������� ��������
-000042 e761                         LDI VAR_Y, 0x71
-000043 e0a0                         LDI INPUT_LOCK, 0x00
-000044 e070                         LDI STATE, 0x00
+                                     ; PORTC - сегменты, выход
+000024 ef0f                          ldi t0, 0xFF
+000025 bb04                          out DDRC, t0
+000026 bb05                          out PORTC, t0            ; погасить сегменты (общий анод)
                                  
-                                    ; MODE ������ �� EEPROM
-000045 940e 0019                    CALL eeprom_read
+                                     ; PORTA0..3 - выбор разрядов, выход
+000027 e00f                          ldi t0, 0x0F
+000028 bb0a                          out DDRA, t0
+000029 2700                          clr t0
+00002a bb0b                          out PORTA, t0
                                  
-000047 940e 00b0                    CALL mode_show
-000049 940e 00b5                    CALL state_show
-00004b 940e 00bf                    CALL calc_negative_y
-                                    
-                                    ; INT0 � INT1
-00004d e00f                         LDI R16, 0x0F
-00004e bf05                         OUT MCUCR, R16
+                                     ; PORTD - кнопки, входы с подтяжкой
+00002b 2700                          clr t0
+00002c bb01                          out DDRD, t0
+00002d ef0f                          ldi t0, 0xFF
+00002e bb02                          out PORTD, t0
                                  
-                                    ; ���������� INT0, INT1
-00004f ec00                         LDI R16, 0xC0
-000050 bf0b                         OUT GICR, R16
-000051 bf0a                         OUT GIFR, R16
-000052 9478                         SEI
-                                    
+                                     ; Очистка переменных
+00002f 2700                          clr t0
+000030 9300 0060                     sts ms_lo, t0
+000032 9300 0061                     sts ms_hi, t0
+000034 9300 0062                     sts run_flag, t0
+000036 9300 0063                     sts disp_mode, t0
+000038 9300 0064                     sts view_index, t0
+00003a 9300 0065                     sts save_count, t0
+00003c 9300 0066                     sts mux_pos, t0
                                  
-                                 ; =====================================================
-                                 ; �������� ����
-                                 ; =====================================================
-                                 loop:
-                                    ; ���� PD7 �������� - ����� ���������� ���������� �����
-000053 b340                         IN   TMP, PIND
-000054 7840                         ANDI TMP, 0b10000000
-000055 3040                         CPI  TMP, 0b00000000
-000056 f409                         BRNE check_input_start
+00003e 9300 0069                     sts cur_m10, t0
+000040 9300 006a                     sts cur_m1,  t0
+000042 9300 006b                     sts cur_s10, t0
+000044 9300 006c                     sts cur_s1,  t0
                                  
-000057 27aa                         CLR  INPUT_LOCK
+000046 9300 006d                     sts disp_m10, t0
+000048 9300 006e                     sts disp_m1,  t0
+00004a 9300 006f                     sts disp_s10, t0
+00004c 9300 0070                     sts disp_s1,  t0
                                  
-                                 check_input_start:
-                                    ; ���� ��� ���� � ������ ����� � PD7 ��� ������ - �� ������� ��������
-000058 30a1                         CPI  INPUT_LOCK, 0x01
-000059 f041                         BREQ normal_work
+00004e e001                          ldi t0, 1
+00004f 9300 0067                     sts btn0_prev, t0
+000051 9300 0068                     sts btn1_prev, t0
                                  
-                                    ; ���� PD7 ������ - ����� � ����� �����
-00005a b340                         IN   TMP, PIND
-00005b 7840                         ANDI TMP, 0b10000000
-00005c 3840                         CPI  TMP, 0b10000000
-00005d f421                         BRNE normal_work
+                                     ; INT0 и INT1 по спадающему фронту
+000053 e00a                          ldi t0, (1<<ISC01) | (1<<ISC11)
+000054 bf05                          out MCUCR, t0
                                  
-00005e 940e 0069                    CALL read_number
-000060 e0a1                         LDI  INPUT_LOCK, 0x01
-000061 cff1                         RJMP loop
+                                     ; Сброс флагов INT0/INT1
+000055 ec00                          ldi t0, (1<<INTF0) | (1<<INTF1)
+000056 bf0a                          out GIFR, t0
                                  
-                                 normal_work:
-000062 3081                         CPI  MODE, 0x01
-000063 f139                         BREQ set_mode_1
-000064 3082                         CPI  MODE, 0x02
-000065 f169                         BREQ set_mode_2
-000066 3083                         CPI  MODE, 0x03
-000067 f199                         BREQ set_mode_3
-000068 cfea                         RJMP loop
+                                     ; Разрешить INT0, INT1, Timer0 OVF
+000057 ec01                          ldi t0, (1<<INT0) | (1<<INT1) | (1<<TOIE0)
+000058 bf0b                          out GICR, t0
                                  
+                                     ; Timer0: normal mode, prescaler 64
+000059 e803                          ldi t0, T0_PRELOAD
+00005a bf02                          out TCNT0, t0
+00005b e003                          ldi t0, (1<<CS01) | (1<<CS00)
+00005c bf03                          out TCCR0, t0
                                  
-                                 ; =====================================================
-                                 ; ���� Y
-                                 ; =====================================================
-                                 read_number:
+00005d 9478                          sei
                                  
-000069 2711                         CLR LAST_Y
-                                    ; ���������, ������ �� ��� PD7
-00006a b340                         IN   TMP, PIND
-00006b 7840                         ANDI TMP, 0b10000000
-00006c 3840                         CPI  TMP, 0b10000000
-00006d f481                         BRNE read_number_done
+                                 MAIN:
+00005e cfff                          rjmp MAIN
                                  
-                                    ; ���, ���� PORTC != 0
-00006e b343                         IN   TMP, PINC
-00006f 3040                         CPI  TMP, 0x00
-000070 f3c1                         BREQ read_number
-                                    
-                                 read_number_capture:
-000071 940e 0013                    CALL delay
-                                     
-000073 b343                         IN   TMP, PINC
-000074 3040                         CPI  TMP, 0x00
-000075 f041                         BREQ read_number_done
-                                    
-000076 2f14                         MOV  LAST_Y, TMP
-                                    
-                                    ; ���������, ������ �� ��� PD7
-000077 b340                         IN   TMP, PIND
-000078 7840                         ANDI TMP, 0b10000000
-000079 3840                         CPI  TMP, 0b10000000
-00007a f409                         BRNE read_number_done_by_pd7_release
+                                 ;=========================================================
+                                 ; INT0 - старт / стоп / возобновление
+                                 ;=========================================================
+                                 INT0_ISR:
+00005f 930f                          push t0
+000060 931f                          push t1
+000061 b70f                          in t0, SREG
+000062 930f                          push t0
                                  
-00007b cff5                         RJMP read_number_capture
-                                    
-                                 read_number_done_by_pd7_release:
-00007c b343                         IN   TMP, PINC
-00007d 2f14                         MOV  LAST_Y, TMP
-                                 read_number_done:
-00007e 2f61                         MOV  VAR_Y, LAST_Y
-00007f 940e 00bf                    CALL calc_negative_y
-000081 9508                         RET
-                                    
+000063 9100 0062                     lds t0, run_flag
+000065 e011                          ldi t1, 1
+000066 2701                          eor t0, t1
+000067 9300 0062                     sts run_flag, t0
                                  
-                                 ; =====================================================
-                                 ; �����
-                                 ; =====================================================
-                                 show:
-000082 bb9b                         OUT PORTA, VAL1
-000083 bb38                         OUT PORTB, VAL2
-000084 940e 0013                    CALL delay
-000086 e041                         LDI TMP, 0x01
-000087 2774                         EOR STATE, TMP
-000088 940e 00b5                    CALL state_show
-00008a cfc8                         RJMP loop
-                                    
+                                     ; после переключения режима показываем текущее значение
+000069 2700                          clr t0
+00006a 9300 0063                     sts disp_mode, t0
+00006c d0df                          rcall COPY_CUR_TO_DISP
                                  
-                                 set_mode_1:
-00008b 3070                         CPI STATE, 0x00
-00008c f419                         BRNE set_negative_mod_1
-00008d ef9f                         LDI VAL1, 0xFF
-00008e e030                         LDI VAL2, 0x00
-00008f cff2                         RJMP show
+00006d 910f                          pop t0
+00006e bf0f                          out SREG, t0
+00006f 911f                          pop t1
+000070 910f                          pop t0
+000071 9518                          reti
                                  
-                                 set_negative_mod_1:
-000090 e090                         LDI VAL1, 0x00
-000091 ef3f                         LDI VAL2, 0xFF
-000092 cfef                         RJMP show
+                                 ;=========================================================
+                                 ; INT1 - стоп, сброс, очистка сохранений
+                                 ;=========================================================
+                                 INT1_ISR:
+000072 930f                          push t0
+000073 931f                          push t1
+000074 93cf                          push YL
+000075 93df                          push YH
+000076 b70f                          in t0, SREG
+000077 930f                          push t0
                                  
+000078 2700                          clr t0
+000079 9300 0062                     sts run_flag, t0
+00007b 9300 0063                     sts disp_mode, t0
+00007d 9300 0064                     sts view_index, t0
+00007f 9300 0065                     sts save_count, t0
+000081 9300 0060                     sts ms_lo, t0
+000083 9300 0061                     sts ms_hi, t0
                                  
-                                 set_mode_2:
-000093 3070                         CPI STATE, 0x00
-000094 f419                         BRNE set_negative_mod_2
-000095 ea9a                         LDI VAL1, 0xAA
-000096 e535                         LDI VAL2, 0x55
-000097 cfea                         RJMP show
+000085 9300 0069                     sts cur_m10, t0
+000087 9300 006a                     sts cur_m1,  t0
+000089 9300 006b                     sts cur_s10, t0
+00008b 9300 006c                     sts cur_s1,  t0
                                  
-                                 set_negative_mod_2:
-000098 e595                         LDI VAL1, 0x55
-000099 ea3a                         LDI VAL2, 0xAA
-00009a cfe7                         RJMP show
+00008d 9300 006d                     sts disp_m10, t0
+00008f 9300 006e                     sts disp_m1,  t0
+000091 9300 006f                     sts disp_s10, t0
+000093 9300 0070                     sts disp_s1,  t0
                                  
+                                     ; очистка буфера сохранений
+000095 e0d0                          ldi YH, high(save_buf)
+000096 e7c1                          ldi YL, low(save_buf)
+000097 e210                          ldi t1, 32
+                                 CLR_LOOP:
+000098 9309                          st Y+, t0
+000099 951a                          dec t1
+00009a f7e9                          brne CLR_LOOP
                                  
-                                 set_mode_3:
-00009b 3070                         CPI STATE, 0x00
-00009c f419                         BRNE set_negative_mod_3
-00009d 2f96                         MOV VAL1, VAR_Y
-00009e 2f32                         MOV VAL2, NEG_VAR_Y
-00009f cfe2                         RJMP show
+00009b 910f                          pop t0
+00009c bf0f                          out SREG, t0
+00009d 91df                          pop YH
+00009e 91cf                          pop YL
+00009f 911f                          pop t1
+0000a0 910f                          pop t0
+0000a1 9518                          reti
                                  
-                                 set_negative_mod_3:
-0000a0 2f92                         MOV VAL1, NEG_VAR_Y
-0000a1 2f36                         MOV VAL2, VAR_Y
-0000a2 cfdf                         RJMP show
-                                    
+                                 ;=========================================================
+                                 ; Timer0 OVF - 1 мс
+                                 ;=========================================================
+                                 TIMER0_OVF_ISR:
+0000a2 930f                          push t0
+0000a3 931f                          push t1
+0000a4 932f                          push t2
+0000a5 933f                          push t3
+0000a6 934f                          push t4
+0000a7 935f                          push t5
+0000a8 93cf                          push YL
+0000a9 93df                          push YH
+0000aa 93ef                          push ZL
+0000ab 93ff                          push ZH
+0000ac b70f                          in t0, SREG
+0000ad 930f                          push t0
                                  
-                                 ; =====================================================
-                                 ; ����� ������
-                                 ; =====================================================
-                                 mode_inc:
-0000a3 9583                         INC MODE
-0000a4 3084                         CPI MODE, 0x04
-0000a5 f409                         BRNE mode_inc_return
-0000a6 e081                         LDI MODE, 0x01
-                                 mode_inc_return:
-0000a7 940e 00b0                    CALL mode_show
-0000a9 9508                         RET
-                                   
-                                 mode_dec:
-0000aa 958a                         DEC MODE
-0000ab f409                         BRNE mode_dec_skip
-0000ac e083                         LDI MODE, 0x03
-                                 mode_dec_skip:
-0000ad 940e 00b0                    CALL mode_show
-0000af 9508                         RET
+                                     ; Перезагрузка таймера
+0000ae e803                          ldi t0, T0_PRELOAD
+0000af bf02                          out TCNT0, t0
                                  
+                                     ;-----------------------------------------
+                                     ; 1. Счет миллисекунд
+                                     ;-----------------------------------------
+0000b0 9100 0060                     lds t0, ms_lo
+0000b2 9503                          inc t0
+0000b3 9300 0060                     sts ms_lo, t0
+0000b5 f429                          brne MS_DONE
+0000b6 9100 0061                     lds t0, ms_hi
+0000b8 9503                          inc t0
+0000b9 9300 0061                     sts ms_hi, t0
+                                 MS_DONE:
                                  
-                                 mode_show:
-0000b0 b342                         IN  TMP, PORTD
-0000b1 7f4c                         ANDI TMP, 0b11111100
-0000b2 2b48                         OR  TMP, MODE
-0000b3 bb42                         OUT PORTD, TMP
-0000b4 9508                         RET
+                                     ; Проверка 1000 мс = 0x03E8
+0000bb 9100 0060                     lds t0, ms_lo
+0000bd 3e08                          cpi t0, low(1000)
+0000be f471                          brne NO_SECOND
+0000bf 9100 0061                     lds t0, ms_hi
+0000c1 3003                          cpi t0, high(1000)
+0000c2 f451                          brne NO_SECOND
                                  
+0000c3 2700                          clr t0
+0000c4 9300 0060                     sts ms_lo, t0
+0000c6 9300 0061                     sts ms_hi, t0
                                  
-                                 state_show:
-0000b5 b342                         IN  TMP, PORTD
-0000b6 7e4f                         ANDI TMP, 0b11101111
-0000b7 2f07                         MOV R16, STATE
-0000b8 0f00                         LSL R16
-0000b9 0f00                         LSL R16
-0000ba 0f00                         LSL R16
-0000bb 0f00                         LSL R16
-0000bc 2b40                         OR  TMP, R16
-0000bd bb42                         OUT PORTD, TMP
-0000be 9508                         RET
-                                    
+0000c8 9100 0062                     lds t0, run_flag
+0000ca 2300                          tst t0
+0000cb f009                          breq NO_SECOND
                                  
-                                 ; =====================================================
-                                 ; ���������� -Y
-                                 ; =====================================================
-                                 calc_negative_y:
-0000bf 2f46                         MOV  TMP, VAR_Y
-0000c0 774f                         ANDI TMP, 0x7F
-0000c1 f021                         BREQ calc_negative_y_return
-0000c2 e840                         LDI  TMP, 0x80
-0000c3 2f26                         MOV  NEG_VAR_Y, VAR_Y
-0000c4 2724                         EOR  NEG_VAR_Y, TMP
-0000c5 9508                         RET
+0000cc d092                          rcall INC_STOPWATCH
                                  
-                                 calc_negative_y_return:
-0000c6 e020                         LDI NEG_VAR_Y, 0x00
-0000c7 9508                         RET
-                                    
+                                 NO_SECOND:
                                  
-                                 ; =====================================================
-                                 ; ����������
-                                 ; =====================================================
-                                 EXT_INT0: 
-0000c8 934f                         PUSH TMP
-0000c9 b74f                         IN   TMP, SREG
-0000ca 934f                         PUSH TMP
+                                     ;-----------------------------------------
+                                     ; 2. PD0 - сохранить значение
+                                     ; активный 0, по фронту нажатия
+                                     ;-----------------------------------------
+0000cd 9980                          sbic PIND, PD0
+0000ce c00d                          rjmp BTN0_RELEASED
                                  
-0000cb 940e 00a3                    CALL mode_inc
-0000cd 940e 0028                    CALL eeprom_write
+                                 BTN0_PRESSED:
+0000cf 9100 0067                     lds t0, btn0_prev
+0000d1 2300                          tst t0
+0000d2 f061                          breq CHECK_BTN1
+0000d3 2700                          clr t0
+0000d4 9300 0067                     sts btn0_prev, t0
                                  
-0000cf 914f                         POP  TMP
-0000d0 bf4f                         OUT  SREG, TMP
-0000d1 914f                         POP  TMP
-0000d2 9518                         RETI
-                                  
+                                     ; save только при работе секундомера
+0000d6 9100 0062                     lds t0, run_flag
+0000d8 2300                          tst t0
+0000d9 f029                          breq CHECK_BTN1
                                  
-                                 EXT_INT1:
-0000d3 934f                         PUSH TMP
-0000d4 b74f                         IN   TMP, SREG
-0000d5 934f                         PUSH TMP
+0000da d0b0                          rcall SAVE_CURRENT
+0000db c003                          rjmp CHECK_BTN1
                                  
-0000d6 940e 00aa                    CALL mode_dec
-0000d8 940e 0028                    CALL eeprom_write
-                                    
-0000da 914f                         POP  TMP
-0000db bf4f                         OUT  SREG, TMP
-0000dc 914f                         POP  TMP
+                                 BTN0_RELEASED:
+0000dc e001                          ldi t0, 1
+0000dd 9300 0067                     sts btn0_prev, t0
+                                 
+                                     ;-----------------------------------------
+                                     ; 3. PD1 - просмотр сохраненных значений
+                                     ; активный 0, по фронту нажатия
+                                     ;-----------------------------------------
+                                 CHECK_BTN1:
+0000df 9981                          sbic PIND, PD1
+0000e0 c027                          rjmp BTN1_RELEASED
+                                 
+                                 BTN1_PRESSED:
+0000e1 9100 0068                     lds t0, btn1_prev
+0000e3 2300                          tst t0
+0000e4 f131                          breq REFRESH_AND_MUX
+0000e5 2700                          clr t0
+0000e6 9300 0068                     sts btn1_prev, t0
+                                 
+                                     ; просмотр только при остановленном секундомере
+0000e8 9100 0062                     lds t0, run_flag
+0000ea 2300                          tst t0
+0000eb f4f9                          brne REFRESH_AND_MUX
+                                 
+                                     ; если нет сохранений - ничего не делать
+0000ec 9100 0065                     lds t0, save_count
+0000ee 2300                          tst t0
+0000ef f0d9                          breq REFRESH_AND_MUX
+                                 
+                                     ; если еще показывали текущее - открыть первое сохранение
+0000f0 9110 0063                     lds t1, disp_mode
+0000f2 2311                          tst t1
+0000f3 f441                          brne NEXT_SAVE_ITEM
+                                 
+0000f4 2711                          clr t1
+0000f5 9310 0064                     sts view_index, t1
+0000f7 e011                          ldi t1, 1
+0000f8 9310 0063                     sts disp_mode, t1
+0000fa d0b5                          rcall LOAD_VIEW_TO_DISP
+0000fb c00f                          rjmp REFRESH_AND_MUX
+                                 
+                                 NEXT_SAVE_ITEM:
+0000fc 9110 0064                     lds t1, view_index
+0000fe 9513                          inc t1
+0000ff 9120 0065                     lds t2, save_count
+000101 1712                          cp t1, t2
+000102 f008                          brlo STORE_VIEW_INDEX
+000103 2711                          clr t1
+                                 
+                                 STORE_VIEW_INDEX:
+000104 9310 0064                     sts view_index, t1
+000106 d0a9                          rcall LOAD_VIEW_TO_DISP
+000107 c003                          rjmp REFRESH_AND_MUX
+                                 
+                                 BTN1_RELEASED:
+000108 e001                          ldi t0, 1
+000109 9300 0068                     sts btn1_prev, t0
+                                 
+                                     ;-----------------------------------------
+                                     ; 4. если отображается текущее - синхронизировать
+                                     ;-----------------------------------------
+                                 REFRESH_AND_MUX:
+00010b 9100 0063                     lds t0, disp_mode
+00010d 2300                          tst t0
+00010e f409                          brne DO_MUX
+00010f d03c                          rcall COPY_CUR_TO_DISP
+                                 
+                                     ;-----------------------------------------
+                                     ; 5. мультиплексирование индикаторов
+                                     ;-----------------------------------------
+                                 DO_MUX:
+                                     ; погасить все разряды
+000110 2700                          clr t0
+000111 bb0b                          out PORTA, t0
+                                 
+000112 9100 0066                     lds t0, mux_pos
+000114 3000                          cpi t0, 0
+000115 f029                          breq MUX_0
+000116 3001                          cpi t0, 1
+000117 f051                          breq MUX_1
+000118 3002                          cpi t0, 2
+000119 f081                          breq MUX_2
+00011a c016                          rjmp MUX_3
+                                 
+                                 MUX_0:
+00011b 9110 006d                     lds t1, disp_m10
+00011d d0ae                          rcall DIGIT_TO_SEG
+00011e bb15                          out PORTC, t1
+00011f e011                          ldi t1, 0b00000001
+000120 bb1b                          out PORTA, t1
+000121 c015                          rjmp MUX_NEXT
+                                 
+                                 MUX_1:
+000122 9110 006e                     lds t1, disp_m1
+000124 d0a7                          rcall DIGIT_TO_SEG
+                                     ; включаем точку после минут
+000125 771f                          andi t1, 0x7F
+000126 bb15                          out PORTC, t1
+000127 e012                          ldi t1, 0b00000010
+000128 bb1b                          out PORTA, t1
+000129 c00d                          rjmp MUX_NEXT
+                                 
+                                 MUX_2:
+00012a 9110 006f                     lds t1, disp_s10
+00012c d09f                          rcall DIGIT_TO_SEG
+00012d bb15                          out PORTC, t1
+00012e e014                          ldi t1, 0b00000100
+00012f bb1b                          out PORTA, t1
+000130 c006                          rjmp MUX_NEXT
+                                 
+                                 MUX_3:
+000131 9110 0070                     lds t1, disp_s1
+000133 d098                          rcall DIGIT_TO_SEG
+000134 bb15                          out PORTC, t1
+000135 e018                          ldi t1, 0b00001000
+000136 bb1b                          out PORTA, t1
+                                 
+                                 MUX_NEXT:
+000137 9100 0066                     lds t0, mux_pos
+000139 9503                          inc t0
+00013a 3004                          cpi t0, 4
+00013b f008                          brlo MUX_STORE
+00013c 2700                          clr t0
+                                 MUX_STORE:
+00013d 9300 0066                     sts mux_pos, t0
+                                 
+00013f 910f                          pop t0
+000140 bf0f                          out SREG, t0
+000141 91ff                          pop ZH
+000142 91ef                          pop ZL
+000143 91df                          pop YH
+000144 91cf                          pop YL
+000145 915f                          pop t5
+000146 914f                          pop t4
+000147 913f                          pop t3
+000148 912f                          pop t2
+000149 911f                          pop t1
+00014a 910f                          pop t0
+00014b 9518                          reti
+                                 
+                                 ;=========================================================
+                                 ; Подпрограммы
+                                 ;=========================================================
+                                 
+                                 ;---------------------------------------------------------
+                                 ; COPY_CUR_TO_DISP
+                                 ;---------------------------------------------------------
+                                 COPY_CUR_TO_DISP:
+00014c 930f                          push t0
+00014d 9100 0069                     lds t0, cur_m10
+00014f 9300 006d                     sts disp_m10, t0
+000151 9100 006a                     lds t0, cur_m1
+000153 9300 006e                     sts disp_m1, t0
+000155 9100 006b                     lds t0, cur_s10
+000157 9300 006f                     sts disp_s10, t0
+000159 9100 006c                     lds t0, cur_s1
+00015b 9300 0070                     sts disp_s1, t0
+00015d 910f                          pop t0
+00015e 9508                          ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ; INC_STOPWATCH
+                                 ; 00.00 -> 99.59 -> 00.00
+                                 ;---------------------------------------------------------
+                                 INC_STOPWATCH:
+00015f 930f                          push t0
+                                 
+000160 9100 006c                     lds t0, cur_s1
+000162 9503                          inc t0
+000163 300a                          cpi t0, 10
+000164 f110                          brlo STORE_S1
+                                 
+000165 2700                          clr t0
+000166 9300 006c                     sts cur_s1, t0
+                                 
+000168 9100 006b                     lds t0, cur_s10
+00016a 9503                          inc t0
+00016b 3006                          cpi t0, 6
+00016c f0b8                          brlo STORE_S10
+                                 
+00016d 2700                          clr t0
+00016e 9300 006b                     sts cur_s10, t0
+                                 
+000170 9100 006a                     lds t0, cur_m1
+000172 9503                          inc t0
+000173 300a                          cpi t0, 10
+000174 f060                          brlo STORE_M1
+                                 
+000175 2700                          clr t0
+000176 9300 006a                     sts cur_m1, t0
+                                 
+000178 9100 0069                     lds t0, cur_m10
+00017a 9503                          inc t0
+00017b 300a                          cpi t0, 10
+00017c f008                          brlo STORE_M10
+                                 
+00017d 2700                          clr t0
+                                 
+                                 STORE_M10:
+00017e 9300 0069                     sts cur_m10, t0
+000180 c008                          rjmp INC_END
+                                 
+                                 STORE_M1:
+000181 9300 006a                     sts cur_m1, t0
+000183 c005                          rjmp INC_END
+                                 
+                                 STORE_S10:
+000184 9300 006b                     sts cur_s10, t0
+000186 c002                          rjmp INC_END
+                                 
+                                 STORE_S1:
+000187 9300 006c                     sts cur_s1, t0
+                                 
+                                 INC_END:
+000189 910f                          pop t0
+00018a 9508                          ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ; SAVE_CURRENT
+                                 ; сохраняет текущее значение в save_buf
+                                 ;---------------------------------------------------------
+                                 SAVE_CURRENT:
+00018b 930f                          push t0
+00018c 931f                          push t1
+00018d 93cf                          push YL
+00018e 93df                          push YH
+                                 
+00018f 9100 0065                     lds t0, save_count
+000191 3008                          cpi t0, MAX_SAVES
+000192 f4c0                          brsh SAVE_EXIT
+                                 
+000193 e0d0                          ldi YH, high(save_buf)
+000194 e7c1                          ldi YL, low(save_buf)
+                                 
+                                 SAVE_OFFSET:
+000195 2300                          tst t0
+000196 f019                          breq SAVE_DO
+000197 9624                          adiw YL, 4
+000198 950a                          dec t0
+000199 cffb                          rjmp SAVE_OFFSET
+                                 
+                                 SAVE_DO:
+00019a 9110 0069                     lds t1, cur_m10
+00019c 9319                          st Y+, t1
+00019d 9110 006a                     lds t1, cur_m1
+00019f 9319                          st Y+, t1
+0001a0 9110 006b                     lds t1, cur_s10
+0001a2 9319                          st Y+, t1
+0001a3 9110 006c                     lds t1, cur_s1
+0001a5 9319                          st Y+, t1
+                                 
+0001a6 9100 0065                     lds t0, save_count
+0001a8 9503                          inc t0
+0001a9 9300 0065                     sts save_count, t0
+                                 
+                                 SAVE_EXIT:
+0001ab 91df                          pop YH
+0001ac 91cf                          pop YL
+0001ad 911f                          pop t1
+0001ae 910f                          pop t0
+0001af 9508                          ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ; LOAD_VIEW_TO_DISP
+                                 ; disp_* = save_buf[view_index]
+                                 ;---------------------------------------------------------
+                                 LOAD_VIEW_TO_DISP:
+0001b0 930f                          push t0
+0001b1 93cf                          push YL
+0001b2 93df                          push YH
+                                 
+0001b3 e0d0                          ldi YH, high(save_buf)
+0001b4 e7c1                          ldi YL, low(save_buf)
+                                 
+0001b5 9100 0064                     lds t0, view_index
+                                 LOAD_OFFSET:
+0001b7 2300                          tst t0
+0001b8 f019                          breq LOAD_DO
+0001b9 9624                          adiw YL, 4
+0001ba 950a                          dec t0
+0001bb cffb                          rjmp LOAD_OFFSET
+                                 
+                                 LOAD_DO:
+0001bc 9109                          ld t0, Y+
+0001bd 9300 006d                     sts disp_m10, t0
+0001bf 9109                          ld t0, Y+
+0001c0 9300 006e                     sts disp_m1, t0
+0001c2 9109                          ld t0, Y+
+0001c3 9300 006f                     sts disp_s10, t0
+0001c5 9109                          ld t0, Y+
+0001c6 9300 0070                     sts disp_s1, t0
+                                 
+0001c8 91df                          pop YH
+0001c9 91cf                          pop YL
+0001ca 910f                          pop t0
+0001cb 9508                          ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ; DIGIT_TO_SEG
+                                 ; вход:  t1 = цифра 0..9
+                                 ; выход: t1 = код сегментов
+                                 ;---------------------------------------------------------
+                                 DIGIT_TO_SEG:
+0001cc 930f                          push t0
+0001cd 93ef                          push ZL
+0001ce 93ff                          push ZH
+                                 
+0001cf e0f3                          ldi ZH, high(SEG_TAB*2)
+0001d0 ebe2                          ldi ZL, low(SEG_TAB*2)
+0001d1 0fe1                          add ZL, t1
+0001d2 2700                          clr t0
+0001d3 1ff0                          adc ZH, t0
+0001d4 9114                          lpm t1, Z
+                                 
+0001d5 91ff                          pop ZH
+0001d6 91ef                          pop ZL
+0001d7 910f                          pop t0
+0001d8 9508                          ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ; Таблица сегментов для общего анода
+                                 ; PORTC = abcdefgdp
+                                 ;---------------------------------------------------------
+                                 SEG_TAB:
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(640): warning: .cseg .db misalignment - padding zero byte
+0001d9 00c0                          .db 0xC0    ; 0
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(641): warning: .cseg .db misalignment - padding zero byte
+0001da 00f9                          .db 0xF9    ; 1
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(642): warning: .cseg .db misalignment - padding zero byte
+0001db 00a4                          .db 0xA4    ; 2
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(643): warning: .cseg .db misalignment - padding zero byte
+0001dc 00b0                          .db 0xB0    ; 3
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(644): warning: .cseg .db misalignment - padding zero byte
+0001dd 0099                          .db 0x99    ; 4
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(645): warning: .cseg .db misalignment - padding zero byte
+0001de 0092                          .db 0x92    ; 5
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(646): warning: .cseg .db misalignment - padding zero byte
+0001df 0082                          .db 0x82    ; 6
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(647): warning: .cseg .db misalignment - padding zero byte
+0001e0 00f8                          .db 0xF8    ; 7
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(648): warning: .cseg .db misalignment - padding zero byte
+0001e1 0080                          .db 0x80    ; 8
+C:\Labs\ACBT\Lab3\bogdan\bogdan\main.asm(649): warning: .cseg .db misalignment - padding zero byte
 
 
 RESOURCE USE INFORMATION
@@ -1198,40 +1539,40 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega32" register use summary:
-x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
+x  :   0 y  :   9 z  :   1 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  11 r17:   4 r18:   5 r19:   7 r20:  69 
-r21:   0 r22:   6 r23:   6 r24:  15 r25:   7 r26:   4 r27:   0 r28:   0 
-r29:   2 r30:   2 r31:   0 
+r13:   0 r14:   0 r15:   0 r16: 192 r17:  50 r18:   4 r19:   2 r20:   2 
+r21:   2 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:  13 
+r29:  11 r30:   6 r31:   6 
 Registers used: 12 out of 35 (34.3%)
 
 "ATmega32" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   7 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+.lds  :   0 .sts  :   0 adc   :   1 add   :   1 adiw  :   2 and   :   0 
+andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :  10 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :  12 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :  16 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   6 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :  17 cpse  :   0 dec   :   3 eor   :   2 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :  13 inc   :   2 jmp   :   3 
-ld    :   0 ldd   :   0 ldi   :  26 lds   :   0 lpm   :   0 lsl   :   4 
-lsr   :   0 mov   :  10 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   6 or    :   2 ori   :   0 out   :  23 pop   :   4 
-push  :   4 rcall :   0 ret   :  11 reti  :   2 rjmp  :  12 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   3 sbic  :   2 sbis  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   6 brlt  :   0 brmi  :   0 
+brne  :   7 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :  17 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
+cpi   :  11 cpse  :   0 dec   :   3 eor   :   1 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   3 inc   :   9 jmp   :   0 
+ld    :   4 ldd   :   0 ldi   :  29 lds   :  36 lpm   :   2 lsl   :   0 
+lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  26 pop   :  31 
+push  :  31 rcall :  10 ret   :   5 reti  :  10 rjmp  :  19 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   2 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   1 sen   :   0 ser   :   1 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
-sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 27 out of 113 (23.9%)
+sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   5 std   :   0 sts   :  61 
+sub   :   0 subi  :   0 swap  :   0 tst   :  10 wdr   :   0 
+Instructions used: 31 out of 113 (27.4%)
 
 "ATmega32" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0001bc    444      0    444   32768   1.4%
-[.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
+[.cseg] 0x000000 0x0003c6    904     20    924   32768   2.8%
+[.dseg] 0x000060 0x000091      0     49     49    2048   2.4%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
-Assembly complete, 0 errors, 1 warnings
+Assembly complete, 0 errors, 10 warnings
