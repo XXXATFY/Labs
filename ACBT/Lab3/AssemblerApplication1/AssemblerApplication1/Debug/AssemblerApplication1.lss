@@ -1,11 +1,16 @@
 
-AVRASM ver. 2.2.8  D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm Thu Apr 16 21:16:50 2026
+AVRASM ver. 2.2.8  D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm Thu Apr 16 21:23:31 2026
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc'
-D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm(9): warning: Register r26 already defined by the .DEF directive
+D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm(2): warning: Register r28 already defined by the .DEF directive
+D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm(11): warning: Register r26 already defined by the .DEF directive
+D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm(12): warning: Register r27 already defined by the .DEF directive
+D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm(14): warning: Register r29 already defined by the .DEF directive
+D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm(15): warning: Register r30 already defined by the .DEF directive
+D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm(16): warning: Register r31 already defined by the .DEF directive
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc'
                                  
-                                 .def TMP        = R20   ; Регистр для временных значений
+                                 .def TMP        = R16
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega32.xml ************
                                  ;*************************************************************************
@@ -821,416 +826,654 @@ D:\Labs\ACBT\Lab2\AssemblerApplication1\AssemblerApplication1\main.asm(9): warni
                                  #endif  /* _M32DEF_INC_ */
                                  
                                  
-                                 .def VAR_Y      = R22   ; Текущее значение Y
-                                 .def STATE      = R23   ; Состояние гирлянды: 0 или 1
-                                 .def MODE       = R24   ; Режим работы гирлянды: 1, 2 или 3
-                                 .def VAL1       = R25   ; Значение, выводимое на PORTA
-                                 .def VAL2       = R19   ; Значение, выводимое на PORTB
-                                 .def NEG_VAR_Y  = R18   ; Значение -Y в прямом коде
-                                 .def LAST_Y     = R17   ; Последнее считанное значение Y
-                                 .def INPUT_LOCK = R26   ; Блокировка повторного входа в режим ввода
-                                 
+                                 .def PIN0       = R28   ; РџСЂР°РІРёР»СЊРЅР°СЏ С†РёС„СЂР° 1
+                                 .def PIN1       = R18   ; РџСЂР°РІРёР»СЊРЅР°СЏ С†РёС„СЂР° 2
+                                 .def PIN2       = R19   ; РџСЂР°РІРёР»СЊРЅР°СЏ С†РёС„СЂР° 3
+                                 .def PIN3       = R20   ; РџСЂР°РІРёР»СЊРЅР°СЏ С†РёС„СЂР° 4
+                                 .def SPIN0      = R21   ; Р’РІРѕРґРёРјР°СЏ С†РёС„СЂР° 1
+                                 .def SPIN1      = R22   ; Р’РІРѕРґРёРјР°СЏ С†РёС„СЂР° 2
+                                 .def SPIN2      = R23   ; Р’РІРѕРґРёРјР°СЏ С†РёС„СЂР° 3
+                                 .def SPIN3      = R24   ; Р’РІРѕРґРёРјР°СЏ С†РёС„СЂР° 4
+                                 .def WRONG      = R25   ; РљРѕР»РёС‡РµСЃС‚РІРѕ РѕС€РёР±РѕС‡РЅС‹С… РїРѕРїС‹С‚РѕРє РІРІРѕРґР° PIN-РєРѕРґР°
+                                 .def DIGIT      = R26   ; РўРµРєСѓС‰РёР№ СЂРµРґР°РєС‚РёСЂСѓРµРјС‹Р№ СЂР°Р·СЂСЏРґ
+                                 .def SHOW       = R27   ; РўРµРєСѓС‰РёР№ РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Р№ СЂР°Р·СЂСЏРґ
+                                 .def DEL2SEC    = R17   ; РЎС‡С‘С‚С‡РёРє Р·Р°РґРµСЂР¶РєРё СѓРґРµСЂР¶Р°РЅРёСЏ РєРЅРѕРїРєРё, С€Р°Рі 10 РјСЃ
+                                 .def DEL250MS   = R29   ; РЎС‡С‘С‚С‡РёРє Р·Р°РґРµСЂР¶РєРё Р°РІС‚РѕРїРѕРІС‚РѕСЂР°, С€Р°Рі 10 РјСЃ
+                                 .def INPDLOOP   = R30   ; Р¤Р»Р°Рі СЃРѕСЃС‚РѕСЏРЅРёСЏ СѓРґРµСЂР¶Р°РЅРёСЏ РєРЅРѕРїРєРё / СЂРµР¶РёРјР° РѕС€РёР±РєРё
+                                 .def BLINK      = R31   ; РЎС‡С‘С‚С‡РёРє РјРёРіР°РЅРёСЏ С‚РµРєСѓС‰РµРіРѕ СЂР°Р·СЂСЏРґР°, С€Р°Рі 5 РјСЃ
                                  
                                  .org $0000
-000000 940c 0034                    JMP reset
+000000 c09b                          RJMP reset
                                  .org INT0addr
-000002 940c 00c8                    JMP EXT_INT0
+000002 c13e                          RJMP EXT_INT0
                                  .org INT1addr
-000004 940c 00d3                    JMP EXT_INT1
+000004 c181                          RJMP EXT_INT1
+                                 .org OC2addr
+000008 c155                          RJMP TIMER2_COMP_ISR
+                                 .org OC0addr
+000014 c136                          RJMP TIMER0_COMP_ISR
+                                 
+                                 ; РћР±СЂР°Р±РѕС‚РєР° СѓРґРµСЂР¶Р°РЅРёСЏ РєРЅРѕРїРѕРє PD0 Рё PD1
+                                 ; РџРѕСЃР»Рµ РїРµСЂРІРѕРіРѕ РЅР°Р¶Р°С‚РёСЏ Р¶РґС‘Рј 2 СЃРµРєСѓРЅРґС‹.
+                                 ; Р—Р°С‚РµРј РїСЂРё СѓРґРµСЂР¶Р°РЅРёРё РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ Р°РІС‚РѕРїРѕРІС‚РѕСЂ РєР°Р¶РґС‹Рµ 250 РјСЃ.
+                                 calc_delay:
+000015 b300                          IN   TMP, PIND
+000016 7003                          ANDI TMP, 0x03
+                                 
+000017 3000                          CPI  TMP, 0x00
+000018 f089                          BREQ reset_delay
+000019 3003                          CPI  TMP, 0x03
+00001a f079                          BREQ reset_delay
+                                 
+                                     ; РЎС‡С‘С‚С‡РёРє Р·Р°РґРµСЂР¶РєРё РїРµСЂРµРґ Р°РІС‚РѕРїРѕРІС‚РѕСЂРѕРј
+                                     ; Timer2 РІС‹Р·С‹РІР°РµС‚ СЌС‚Рѕ РјРµСЃС‚Рѕ РєР°Р¶РґС‹Рµ 10 РјСЃ
+                                     ; 200 * 10 РјСЃ = 2 СЃРµРєСѓРЅРґС‹
+00001b 9513                          INC  DEL2SEC
+00001c 3c18                          CPI  DEL2SEC, 200
+00001d f019                          BREQ pdsdelay
+                                 
+                                     ; Р•СЃР»Рё СЂРµР¶РёРј Р°РІС‚РѕРїРѕРІС‚РѕСЂР° СѓР¶Рµ РІРєР»СЋС‡С‘РЅ, РїСЂРѕРґРѕР»Р¶Р°РµРј СЃС‡РёС‚Р°С‚СЊ 250 РјСЃ
+00001e 30e1                          CPI  INPDLOOP, 0x01
+00001f f40c                          BRGE pdsdelay
+                                 
+000020 9508                          RET
+                                 
+                                 pdsdelay:
+                                     ; Р’РєР»СЋС‡Р°РµРј СЂРµР¶РёРј СѓРґРµСЂР¶Р°РЅРёСЏ РєРЅРѕРїРєРё
+000021 e0e1                          LDI  INPDLOOP, 0x01
+                                 
+                                     ; 25 * 10 РјСЃ = 250 РјСЃ
+000022 95d3                          INC  DEL250MS
+000023 31d9                          CPI  DEL250MS, 25
+000024 f009                          BREQ pdsloop
+000025 9508                          RET
+                                 
+                                 pdsloop:
+                                     ; РџСЂРѕС€Р»Рѕ 250 РјСЃ - РІС‹РїРѕР»РЅСЏРµРј РёР·РјРµРЅРµРЅРёРµ С†РёС„СЂС‹
+000026 e0d0                          LDI  DEL250MS, 0x00
+000027 3001                          CPI  TMP, 0x01
+000028 f0d1                          BREQ increase_digit
+000029 f5c9                          BRNE decrease_digit
+                                 
+                                 reset_delay:
+                                     ; РЎР±СЂРѕСЃ СЃРѕСЃС‚РѕСЏРЅРёСЏ СѓРґРµСЂР¶Р°РЅРёСЏ РїРѕСЃР»Рµ РѕС‚РїСѓСЃРєР°РЅРёСЏ РєРЅРѕРїРєРё
+00002a e0e0                          LDI  INPDLOOP, 0x00
+00002b e0d0                          LDI  DEL250MS, 0x00
+00002c e010                          LDI  DEL2SEC, 0x00
+                                 
+                                 return:
+00002d 9508                          RET
                                  
                                  
-                                 ; Программная задержка около 10 мс
-                                 delay_10ms:
-000006 ece1                         LDI  R30, 193
-000007 e6d5                         LDI  R29, 101
+                                 ; РћР±СЂР°Р±РѕС‚РєР° РєРѕСЂРѕС‚РєРѕРіРѕ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРѕРє PD0 Рё PD1
+                                 ; PD0 - СѓРІРµР»РёС‡РµРЅРёРµ С‚РµРєСѓС‰РµР№ С†РёС„СЂС‹
+                                 ; PD1 - СѓРјРµРЅСЊС€РµРЅРёРµ С‚РµРєСѓС‰РµР№ С†РёС„СЂС‹
+                                 check_buttons:
+                                     ; Р•СЃР»Рё DEL2SEC РЅРµ СЂР°РІРµРЅ РЅСѓР»СЋ, Р·РЅР°С‡РёС‚ РєРЅРѕРїРєР° СѓР¶Рµ Р±С‹Р»Р° РѕР±СЂР°Р±РѕС‚Р°РЅР°
+00002e 3010                          CPI  DEL2SEC, 0x00
+00002f f7e9                          BRNE return
                                  
-                                 delay_10ms_sb:
-000008 0000                         NOP
-000009 95da                         DEC  R29
-00000a 0000                         NOP
-00000b f7e1                         BRNE delay_10ms_sb
-00000c 95e3                         INC  R30
-00000d f7d1                         BRNE delay_10ms_sb
-00000e 0000                         NOP
-00000f 0000                         NOP
-000010 0000                         NOP
-000011 0000                         NOP
-000012 9508                         RET
+000030 b300                          IN   TMP, PIND
+000031 7003                          ANDI TMP, 0x03
+                                 
+000032 3001                          CPI  TMP, 0x01
+000033 f019                          BREQ check_inc
+000034 3002                          CPI  TMP, 0x02
+000035 f039                          BREQ check_dec
+000036 9508                          RET
+                                 
+                                 check_inc:
+000037 940e 0043                     CALL increase_digit
+000039 e011                          LDI  DEL2SEC, 0x01
+00003a e0d0                          LDI  DEL250MS, 0x00
+00003b e0e0                          LDI  INPDLOOP, 0x00
+00003c 9508                          RET
+                                 
+                                 check_dec:
+00003d 940e 0063                     CALL decrease_digit
+00003f e011                          LDI  DEL2SEC, 0x01
+000040 e0d0                          LDI  DEL250MS, 0x00
+000041 e0e0                          LDI  INPDLOOP, 0x00
+000042 9508                          RET
                                  
                                  
-                                 ; Программная задержка около 250 мс
-                                 ; Выполняется как 25 задержек по 10 мс
-                                 delay:
-000013 e149                         LDI  TMP, 25
+                                 ; РЈРІРµР»РёС‡РµРЅРёРµ С‚РµРєСѓС‰РµР№ СЂРµРґР°РєС‚РёСЂСѓРµРјРѕР№ С†РёС„СЂС‹
+                                 increase_digit:
+000043 30a1                          CPI DIGIT, 0x01
+000044 f031                          BREQ increase_spin0
+000045 30a2                          CPI DIGIT, 0x02
+000046 f051                          BREQ increase_spin1
+000047 30a4                          CPI DIGIT, 0x04
+000048 f071                          BREQ increase_spin2
+000049 30a8                          CPI DIGIT, 0x08
+00004a f091                          BREQ increase_spin3
                                  
-                                 delay_sb:
-000014 940e 0006                    CALL delay_10ms
-000016 954a                         DEC  TMP
-000017 f7e1                         BRNE delay_sb
-000018 9508                         RET
+                                 increase_spin0:
+00004b 3059                          CPI SPIN0, 0x09
+00004c f411                          BRNE increase_spin0_loop
+00004d e050                          LDI SPIN0, 0x00
+00004e 9508                          RET
+                                 increase_spin0_loop:
+00004f 9553                          INC SPIN0
+000050 9508                          RET
+                                 
+                                 increase_spin1:
+000051 3069                          CPI SPIN1, 0x09
+000052 f411                          BRNE increase_spin1_loop
+000053 e060                          LDI SPIN1, 0x00
+000054 9508                          RET
+                                 increase_spin1_loop:
+000055 9563                          INC SPIN1
+000056 9508                          RET
+                                 
+                                 increase_spin2:
+000057 3079                          CPI SPIN2, 0x09
+000058 f411                          BRNE increase_spin2_loop
+000059 e070                          LDI SPIN2, 0x00
+00005a 9508                          RET
+                                 increase_spin2_loop:
+00005b 9573                          INC SPIN2
+00005c 9508                          RET
+                                 
+                                 increase_spin3:
+00005d 3089                          CPI SPIN3, 0x09
+00005e f411                          BRNE increase_spin3_loop
+00005f e080                          LDI SPIN3, 0x00
+000060 9508                          RET
+                                 increase_spin3_loop:
+000061 9583                          INC SPIN3
+000062 9508                          RET
                                  
                                  
-                                 ; Чтение режима работы из EEPROM
-                                 ; Режим хранится по адресу 0x00.
-                                 ; Допустимые значения: 1, 2, 3.
-                                 ; Если в EEPROM находится другое значение, выбирается режим 1.
+                                 ; РЈРјРµРЅСЊС€РµРЅРёРµ С‚РµРєСѓС‰РµР№ СЂРµРґР°РєС‚РёСЂСѓРµРјРѕР№ С†РёС„СЂС‹
+                                 decrease_digit:
+000063 30a1                          CPI DIGIT, 0x01
+000064 f031                          BREQ decrease_spin0
+000065 30a2                          CPI DIGIT, 0x02
+000066 f051                          BREQ decrease_spin1
+000067 30a4                          CPI DIGIT, 0x04
+000068 f071                          BREQ decrease_spin2
+000069 30a8                          CPI DIGIT, 0x08
+00006a f091                          BREQ decrease_spin3
+                                 
+                                 decrease_spin0:
+00006b 3050                          CPI SPIN0, 0x00
+00006c f411                          BRNE decrease_spin0_loop
+00006d e059                          LDI SPIN0, 0x09
+00006e 9508                          RET
+                                 decrease_spin0_loop:
+00006f 955a                          DEC SPIN0
+000070 9508                          RET
+                                 
+                                 decrease_spin1:
+000071 3060                          CPI SPIN1, 0x00
+000072 f411                          BRNE decrease_spin1_loop
+000073 e069                          LDI SPIN1, 0x09
+000074 9508                          RET
+                                 decrease_spin1_loop:
+000075 956a                          DEC SPIN1
+000076 9508                          RET
+                                 
+                                 decrease_spin2:
+000077 3070                          CPI SPIN2, 0x00
+000078 f411                          BRNE decrease_spin2_loop
+000079 e079                          LDI SPIN2, 0x09
+00007a 9508                          RET
+                                 decrease_spin2_loop:
+00007b 957a                          DEC SPIN2
+00007c 9508                          RET
+                                 
+                                 decrease_spin3:
+00007d 3080                          CPI SPIN3, 0x00
+00007e f411                          BRNE decrease_spin3_loop
+00007f e089                          LDI SPIN3, 0x09
+000080 9508                          RET
+                                 decrease_spin3_loop:
+000081 958a                          DEC SPIN3
+000082 9508                          RET
+                                 
+                                 
+                                 ; Р§С‚РµРЅРёРµ PIN-РєРѕРґР° РёР· EEPROM
+                                 ; PIN С…СЂР°РЅРёС‚СЃСЏ РїРѕ Р°РґСЂРµСЃР°Рј 0x00, 0x01, 0x02, 0x03
                                  eeprom_read:
-000019 99e1                         SBIC EECR, EEWE
-00001a cffe                         RJMP eeprom_read
+                                     ; Р§С‚РµРЅРёРµ PIN0
+000083 e000                          LDI  TMP, 0x00
+000084 bb0f                          OUT  EEARH, TMP
+000085 e000                          LDI  TMP, 0x00
+000086 bb0e                          OUT  EEARL, TMP
+000087 9ae0                          SBI  EECR, EERE
+000088 b3cd                          IN   PIN0, EEDR
                                  
-00001b 2744                         CLR TMP
-00001c bb4f                         OUT EEARH, TMP
-00001d bb4e                         OUT EEARL, TMP
+                                     ; Р§С‚РµРЅРёРµ PIN1
+000089 e000                          LDI  TMP, 0x00
+00008a bb0f                          OUT  EEARH, TMP
+00008b e001                          LDI  TMP, 0x01
+00008c bb0e                          OUT  EEARL, TMP
+00008d 9ae0                          SBI  EECR, EERE
+00008e b32d                          IN   PIN1, EEDR
                                  
-00001e 9ae0                         SBI EECR, EERE
-00001f b38d                         IN  MODE, EEDR
+                                     ; Р§С‚РµРЅРёРµ PIN2
+00008f e000                          LDI  TMP, 0x00
+000090 bb0f                          OUT  EEARH, TMP
+000091 e002                          LDI  TMP, 0x02
+000092 bb0e                          OUT  EEARL, TMP
+000093 9ae0                          SBI  EECR, EERE
+000094 b33d                          IN   PIN2, EEDR
                                  
-000020 3081                         CPI MODE, 0x01
-000021 f029                         BREQ eeprom_read_ok
-000022 3082                         CPI MODE, 0x02
-000023 f019                         BREQ eeprom_read_ok
-000024 3083                         CPI MODE, 0x03
-000025 f009                         BREQ eeprom_read_ok
+                                     ; Р§С‚РµРЅРёРµ PIN3
+000095 e000                          LDI  TMP, 0x00
+000096 bb0f                          OUT  EEARH, TMP
+000097 e003                          LDI  TMP, 0x03
+000098 bb0e                          OUT  EEARL, TMP
+000099 9ae0                          SBI  EECR, EERE
+00009a b34d                          IN   PIN3, EEDR
                                  
-000026 e081                         LDI MODE, 0x01
-                                 
-                                 eeprom_read_ok:
-000027 9508                         RET
-                                 
-                                 
-                                 ; Запись текущего режима работы в EEPROM
-                                 ; MODE записывается по адресу 0x00.
-                                 eeprom_write:
-000028 99e1                         SBIC EECR, EEWE
-000029 cffe                         RJMP eeprom_write
-                                 
-00002a 2744                         CLR TMP
-00002b bb4f                         OUT EEARH, TMP
-00002c bb4e                         OUT EEARL, TMP
-                                 
-00002d bb8d                         OUT EEDR, MODE
-                                 
-00002e b74f                         IN  TMP, SREG
-00002f 94f8                         CLI
-000030 9ae2                         SBI EECR, EEMWE
-000031 9ae1                         SBI EECR, EEWE
-000032 bf4f                         OUT SREG, TMP
-000033 9508                         RET
+00009b 9508                          RET
                                  
                                  
+                                 ; РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРёРєСЂРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂР°
                                  reset:
-                                    ; Инициализация стека
-000034 e048                         LDI  TMP, HIGH(RAMEND)
-000035 bf4e                         OUT  SPH, TMP
-000036 e54f                         LDI  TMP, LOW(RAMEND)
-000037 bf4d                         OUT  SPL, TMP
+                                     ; РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃС‚РµРєР°
+00009c e008                          LDI  TMP, HIGH(RAMEND)
+00009d bf0e                          OUT  SPH, TMP
+00009e e50f                          LDI  TMP, LOW(RAMEND)
+00009f bf0d                          OUT  SPL, TMP
                                  
-                                    ; PORTC — вход для ввода значения Y
-000038 2744                         CLR  TMP
-000039 bb44                         OUT  DDRC, TMP
-00003a bb45                         OUT  PORTC, TMP
+                                     ; PORTA - СѓРїСЂР°РІР»РµРЅРёРµ СЂР°Р·СЂСЏРґР°РјРё СЃРµРјРёСЃРµРіРјРµРЅС‚РЅРѕРіРѕ РёРЅРґРёРєР°С‚РѕСЂР°
+                                     ; PA0..PA3 - РІС‹Р±РѕСЂ СЂР°Р·СЂСЏРґР°
+                                     ; PA6 - РёРЅРґРёРєР°С†РёСЏ РѕС€РёР±РєРё
+                                     ; PA7 - РёРЅРґРёРєР°С†РёСЏ РїСЂР°РІРёР»СЊРЅРѕРіРѕ PIN-РєРѕРґР°
+0000a0 ef0f                          SER  TMP
+0000a1 bb0a                          OUT  DDRA, TMP
+0000a2 2700                          CLR  TMP
+0000a3 bb0b                          OUT  PORTA, TMP
                                  
-                                    ; PORTD:
-                                    ; PD0, PD1 — вывод номера текущего режима
-                                    ; PD2 — INT0, переключение режима вперёд
-                                    ; PD3 — INT1, переключение режима назад
-                                    ; PD4 — вывод текущего состояния гирлянды
-                                    ; PD5, PD6 — выходы
-                                    ; PD7 — вход, кнопка входа в режим ввода Y
-00003b e743                         LDI  TMP, 0x73
-00003c bb41                         OUT  DDRD, TMP
-00003d 2744                         CLR  TMP
-00003e bb42                         OUT  PORTD, TMP
+                                     ; PORTC вЂ” СЃРµРіРјРµРЅС‚С‹ СЃРµРјРёСЃРµРіРјРµРЅС‚РЅРѕРіРѕ РёРЅРґРёРєР°С‚РѕСЂР°
+0000a4 ef0f                          SER  TMP
+0000a5 bb04                          OUT  DDRC, TMP
+0000a6 bb05                          OUT  PORTC, TMP
                                  
-                                    ; PORTA и PORTB — выходы для управления гирляндой
-00003f ef4f                         SER  TMP
-000040 bb4a                         OUT  DDRA, TMP
-000041 bb47                         OUT  DDRB, TMP
+                                     ; PORTD:
+                                     ; PD0 - РєРЅРѕРїРєР° СѓРІРµР»РёС‡РµРЅРёСЏ С†РёС„СЂС‹
+                                     ; PD1 - РєРЅРѕРїРєР° СѓРјРµРЅСЊС€РµРЅРёСЏ С†РёС„СЂС‹
+                                     ; PD2 - INT0, РїРµСЂРµС…РѕРґ Рє РїСЂРµРґС‹РґСѓС‰РµРјСѓ СЂР°Р·СЂСЏРґСѓ
+                                     ; PD3 - INT1, РїРµСЂРµС…РѕРґ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЂР°Р·СЂСЏРґСѓ / РїСЂРѕРІРµСЂРєР° PIN-РєРѕРґР°
+                                     ; PD4..PD7 вЂ” РІС‹С…РѕРґС‹
+0000a7 ef00                          LDI  TMP, 0xF0
+0000a8 bb01                          OUT  DDRD, TMP
+0000a9 2700                          CLR  TMP
+0000aa bb02                          OUT  PORTD, TMP
                                  
-                                    ; Начальные значения переменных
-000042 e761                         LDI VAR_Y, 0x71
-000043 e0a0                         LDI INPUT_LOCK, 0x00
-000044 e070                         LDI STATE, 0x00
+                                     ; РќР°С‡Р°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅС‹С…
+0000ab e090                          LDI  WRONG, 0x00
+0000ac e0a1                          LDI  DIGIT, 0x01
+0000ad e010                          LDI  DEL2SEC, 0x00
+0000ae e0d0                          LDI  DEL250MS, 0x00
+0000af e050                          LDI  SPIN0, 0x00
+0000b0 e060                          LDI  SPIN1, 0x00
+0000b1 e070                          LDI  SPIN2, 0x00
+0000b2 e080                          LDI  SPIN3, 0x00
+0000b3 e0c0                          LDI  PIN0, 0x00
+0000b4 e020                          LDI  PIN1, 0x00
+0000b5 e030                          LDI  PIN2, 0x00
+0000b6 e040                          LDI  PIN3, 0x00
+0000b7 e0f0                          LDI  BLINK, 0x00
                                  
-                                    ; Чтение сохранённого режима из EEPROM
-000045 940e 0019                    CALL eeprom_read
+                                     ; Р§С‚РµРЅРёРµ РїСЂР°РІРёР»СЊРЅРѕРіРѕ PIN-РєРѕРґР° РёР· EEPROM
+                                     ;CALL eeprom_read
                                  
-                                    ; Отображение текущего режима и состояния на PORTD
-000047 940e 00b0                    CALL mode_show
-000049 940e 00b5                    CALL state_show
+                                     ; РќР°СЃС‚СЂРѕР№РєР° РІРЅРµС€РЅРёС… РїСЂРµСЂС‹РІР°РЅРёР№ INT0 Рё INT1
+                                     ; INT0 Рё INT1 СЃСЂР°Р±Р°С‚С‹РІР°СЋС‚ РїРѕ РїРµСЂРµРґРЅРµРјСѓ С„СЂРѕРЅС‚Сѓ (0 -> 1)
+0000b8 e00f                          LDI  R16, 0x0F
+0000b9 bf05                          OUT  MCUCR, R16
                                  
-                                    ; Расчёт -Y для режима 3
-00004b 940e 00bf                    CALL calc_negative_y
+                                     ; Р Р°Р·СЂРµС€РµРЅРёРµ INT0 Рё INT1
+                                     ; GICR = 0xC0: РІРєР»СЋС‡РµРЅС‹ INT1 Рё INT0
+0000ba ec00                          LDI  R16, 0xC0
+0000bb bf0b                          OUT  GICR, R16
+0000bc bf0a                          OUT  GIFR, R16
                                  
-                                    ; Настройка внешних прерываний INT0 и INT1
-                                    ; MCUCR = 0x0F:
-                                    ; INT0 и INT1 срабатывают по переднему фронту
-00004d e00f                         LDI R16, 0x0F
-00004e bf05                         OUT MCUCR, R16
+                                     ; Timer0 вЂ” РјРёРіР°РЅРёРµ С‚РµРєСѓС‰РµРіРѕ СЂР°Р·СЂСЏРґР°
+                                     ; Р РµР¶РёРј CTC, РїСЂРµРґРґРµР»РёС‚РµР»СЊ 256
+                                     ; OCR0 = 155
+                                     ; РџРµСЂРёРѕРґ: 156 * 256 / 8 РњР“С† = 5 РјСЃ
+0000bd e00c                          LDI  TMP, 0x0C
+0000be bf03                          OUT  TCCR0, TMP
+0000bf e90b                          LDI  TMP, 155
+0000c0 bf0c                          OUT  OCR0, TMP
                                  
-                                    ; Разрешение внешних прерываний INT0 и INT1
-                                    ; GICR = 0xC0: включены INT1 и INT0
-00004f ec00                         LDI R16, 0xC0
-000050 bf0b                         OUT GICR, R16
+                                     ; Timer2 вЂ” РѕРїСЂРѕСЃ РєРЅРѕРїРѕРє Рё РІСЂРµРјРµРЅРЅС‹Рµ Р·Р°РґРµСЂР¶РєРё
+                                     ; Р РµР¶РёРј CTC, РїСЂРµРґРґРµР»РёС‚РµР»СЊ 1024
+                                     ; OCR2 = 77
+                                     ; РџРµСЂРёРѕРґ: 78 * 1024 / 8 РњР“С† = 10 РјСЃ
+0000c1 e00f                          LDI  TMP, 0x0F
+0000c2 bd05                          OUT  TCCR2, TMP
+0000c3 e40d                          LDI  TMP, 77
+0000c4 bd03                          OUT  OCR2, TMP
                                  
-                                    ; Сброс возможных флагов внешних прерываний
-000051 bf0a                         OUT GIFR, R16
+                                     ; Р Р°Р·СЂРµС€РµРЅРёРµ РїСЂРµСЂС‹РІР°РЅРёР№ РїРѕ СЃРѕРІРїР°РґРµРЅРёСЋ Timer0 Рё Timer2
+                                     ; TIMSK = 0x82: OCIE2 = 1, OCIE0 = 1
+0000c5 e802                          LDI  TMP, 0x82
+0000c6 bf09                          OUT  TIMSK, TMP
                                  
-                                    ; Глобальное разрешение прерываний
-000052 9478                         SEI
+                                     ; Р“Р»РѕР±Р°Р»СЊРЅРѕРµ СЂР°Р·СЂРµС€РµРЅРёРµ РїСЂРµСЂС‹РІР°РЅРёР№
+0000c7 9478                          SEI
                                  
                                  
-                                 ; Основной цикл программы
-                                 ; Проверяет вход в режим ввода Y и выполняет выбранный режим гирлянды
+                                 ; РћСЃРЅРѕРІРЅРѕР№ С†РёРєР» РїСЂРѕРіСЂР°РјРјС‹
+                                 ; РџРѕРѕС‡РµСЂС‘РґРЅРѕ РІС‹РІРѕРґРёС‚ С‡РµС‚С‹СЂРµ С†РёС„СЂС‹ PIN-РєРѕРґР° РЅР° РёРЅРґРёРєР°С‚РѕСЂ
                                  loop:
-                                    ; Если PD7 отпущена, снимаем блокировку повторного ввода
-000053 b340                         IN   TMP, PIND
-000054 7840                         ANDI TMP, 0b10000000
-000055 3040                         CPI  TMP, 0b00000000
-000056 f409                         BRNE check_input_start
+0000c8 30e2                          CPI INPDLOOP, 0x02
+0000c9 f171                          BREQ wrong_wait_loop
                                  
-000057 27aa                         CLR  INPUT_LOCK
+0000ca 3f9f                          CPI WRONG, 0xFF
+0000cb f089                          BREQ correct_loop
                                  
-                                 check_input_start:
-                                    ; Если ввод уже был выполнен, а PD7 всё ещё удерживается,
-                                    ; повторно в режим ввода не входим
-000058 30a1                         CPI  INPUT_LOCK, 0x01
-000059 f041                         BREQ normal_work
+0000cc e0b1                          LDI SHOW, 0x01
+0000cd 2f05                          MOV TMP, SPIN0
+0000ce 940e 0100                     CALL show_digit
+                                     
+0000d0 0fbb                          LSL SHOW
+0000d1 2f06                          MOV TMP, SPIN1
+0000d2 940e 0100                     CALL show_digit
+                                     
+0000d4 0fbb                          LSL SHOW
+0000d5 2f07                          MOV TMP, SPIN2
+0000d6 940e 0100                     CALL show_digit
                                  
-                                    ; Если PD7 нажата, переходим в режим ввода Y
-00005a b340                         IN   TMP, PIND
-00005b 7840                         ANDI TMP, 0b10000000
-00005c 3840                         CPI  TMP, 0b10000000
-00005d f421                         BRNE normal_work
+0000d8 0fbb                          LSL SHOW
+0000d9 2f08                          MOV TMP, SPIN3
+0000da 940e 0100                     CALL show_digit
                                  
-00005e 940e 0069                    CALL read_number
-000060 e0a1                         LDI  INPUT_LOCK, 0x01
-000061 cff1                         RJMP loop
-                                 
-                                 normal_work:
-000062 3081                         CPI  MODE, 0x01
-000063 f139                         BREQ set_mode_1
-000064 3082                         CPI  MODE, 0x02
-000065 f169                         BREQ set_mode_2
-000066 3083                         CPI  MODE, 0x03
-000067 f199                         BREQ set_mode_3
-                                 
-000068 cfea                         RJMP loop
+0000dc cfeb                          RJMP loop
                                  
                                  
-                                 ; Ввод значения Y с PORTC
-                                 ; Ввод выполняется при удержании PD7.
-                                 ; Последнее ненулевое значение с PINC сохраняется в VAR_Y.
-                                 read_number:
-000069 2711                         CLR LAST_Y
-                                 
-                                    ; Если PD7 уже отпущена, завершаем ввод
-00006a b340                         IN   TMP, PIND
-00006b 7840                         ANDI TMP, 0b10000000
-00006c 3840                         CPI  TMP, 0b10000000
-00006d f481                         BRNE read_number_done
-                                 
-                                    ; Ждём, пока на PORTC появится ненулевое значение
-00006e b343                         IN   TMP, PINC
-00006f 3040                         CPI  TMP, 0x00
-000070 f3c1                         BREQ read_number
-                                 
-                                 read_number_capture:
-                                    ; Небольшая задержка
-000071 940e 0013                    CALL delay
-                                 
-                                    ; Если PORTC стал равен 0, завершаем ввод
-000073 b343                         IN   TMP, PINC
-000074 3040                         CPI  TMP, 0x00
-000075 f041                         BREQ read_number_done
-                                 
-                                    ; Запоминаем последнее считанное значение
-000076 2f14                         MOV  LAST_Y, TMP
-                                 
-                                    ; Если PD7 всё ещё нажата, продолжаем считывание
-000077 b340                         IN   TMP, PIND
-000078 7840                         ANDI TMP, 0b10000000
-000079 3840                         CPI  TMP, 0b10000000
-00007a f409                         BRNE read_number_done_by_pd7_release
-                                 
-00007b cff5                         RJMP read_number_capture
-                                 
-                                 read_number_done_by_pd7_release:
-                                    ; При отпускании PD7 дополнительно считываем текущее значение PINC
-00007c b343                         IN   TMP, PINC
-00007d 2f14                         MOV  LAST_Y, TMP
-                                 
-                                 read_number_done:
-                                    ; Сохраняем введённое значение и пересчитываем -Y
-00007e 2f61                         MOV  VAR_Y, LAST_Y
-00007f 940e 00bf                    CALL calc_negative_y
-000081 9508                         RET
+                                 ; Р РµР¶РёРј РїСЂР°РІРёР»СЊРЅРѕРіРѕ РІРІРѕРґР° PIN-РєРѕРґР°
+                                 ; РќР° РёРЅРґРёРєР°С‚РѕСЂ РІС‹РІРѕРґРёС‚СЃСЏ 9999, РІРєР»СЋС‡Р°РµС‚СЃСЏ PA7
+                                 correct_loop:
+0000dd e059                          LDI  SPIN0, 0x09
+0000de e069                          LDI  SPIN1, 0x09
+0000df e079                          LDI  SPIN2, 0x09
+0000e0 e089                          LDI  SPIN3, 0x09
+0000e1 e800                          LDI  TMP, 0x80
+0000e2 bb0b                          OUT  PORTA, TMP
+0000e3 cfe4                          RJMP loop
                                  
                                  
-                                 ; Вывод текущих значений гирлянды
-                                 ; После вывода выполняется задержка 250 мс и переключение STATE.
-                                 show:
-000082 bb9b                         OUT PORTA, VAL1
-000083 bb38                         OUT PORTB, VAL2
+                                 ; РЎСЂР°РІРЅРµРЅРёРµ РІРІРµРґС‘РЅРЅРѕРіРѕ PIN-РєРѕРґР° СЃ РїСЂР°РІРёР»СЊРЅС‹Рј PIN-РєРѕРґРѕРј
+                                 compare_pins:
+0000e4 175c                          CP  SPIN0, PIN0
+0000e5 f449                          BRNE wrong_pin
+0000e6 1762                          CP  SPIN1, PIN1
+0000e7 f439                          BRNE wrong_pin
+0000e8 1773                          CP  SPIN2, PIN2
+0000e9 f429                          BRNE wrong_pin
+0000ea 1784                          CP  SPIN3, PIN3
+0000eb f419                          BRNE wrong_pin
                                  
-000084 940e 0013                    CALL delay
-                                 
-000086 e041                         LDI TMP, 0x01
-000087 2774                         EOR STATE, TMP
-                                 
-000088 940e 00b5                    CALL state_show
-                                 
-00008a cfc8                         RJMP loop
-                                 
-                                 
-                                 ; Режим 1
-                                 ; PORTA и PORTB поочерёдно принимают значения FF/00 и 00/FF.
-                                 set_mode_1:
-00008b 3070                         CPI STATE, 0x00
-00008c f419                         BRNE set_negative_mod_1
-                                 
-00008d ef9f                         LDI VAL1, 0xFF
-00008e e030                         LDI VAL2, 0x00
-00008f cff2                         RJMP show
-                                 
-                                 set_negative_mod_1:
-000090 e090                         LDI VAL1, 0x00
-000091 ef3f                         LDI VAL2, 0xFF
-000092 cfef                         RJMP show
+0000ec ef0f                          LDI TMP, 0xFF
+0000ed 2f90                          MOV WRONG, TMP
+0000ee 9508                          RET
                                  
                                  
-                                 ; Режим 2
-                                 ; PORTA и PORTB поочерёдно принимают значения AA/55 и 55/AA.
-                                 set_mode_2:
-000093 3070                         CPI STATE, 0x00
-000094 f419                         BRNE set_negative_mod_2
+                                 ; РћР±СЂР°Р±РѕС‚РєР° РЅРµРІРµСЂРЅРѕРіРѕ PIN-РєРѕРґР°
+                                 wrong_pin:
+0000ef 9593                          INC WRONG
+0000f0 3093                          CPI WRONG, 0x03
+0000f1 f059                          BREQ lock
                                  
-000095 ea9a                         LDI VAL1, 0xAA
-000096 e535                         LDI VAL2, 0x55
-000097 cfea                         RJMP show
+0000f2 e400                          LDI TMP, 0x40
+0000f3 bb0b                          OUT PORTA, TMP
                                  
-                                 set_negative_mod_2:
-000098 e595                         LDI VAL1, 0x55
-000099 ea3a                         LDI VAL2, 0xAA
-00009a cfe7                         RJMP show
-                                 
-                                 
-                                 ; Режим 3
-                                 ; Используется введённое значение Y и рассчитанное значение -Y.
-                                 set_mode_3:
-00009b 3070                         CPI STATE, 0x00
-00009c f419                         BRNE set_negative_mod_3
-                                 
-00009d 2f96                         MOV VAL1, VAR_Y
-00009e 2f32                         MOV VAL2, NEG_VAR_Y
-00009f cfe2                         RJMP show
-                                 
-                                 set_negative_mod_3:
-0000a0 2f92                         MOV VAL1, NEG_VAR_Y
-0000a1 2f36                         MOV VAL2, VAR_Y
-0000a2 cfdf                         RJMP show
+0000f4 e0e2                          LDI INPDLOOP, 0x02
+0000f5 e010                          LDI DEL2SEC, 0x00
+0000f6 e0d0                          LDI DEL250MS, 0x00
+0000f7 9508                          RET
                                  
                                  
-                                 ; Увеличение номера режима
-                                 ; После режима 3 снова выбирается режим 1.
-                                 mode_inc:
-0000a3 9583                         INC MODE
-0000a4 3084                         CPI MODE, 0x04
-0000a5 f409                         BRNE mode_inc_return
+                                 ; РћР¶РёРґР°РЅРёРµ РїРѕСЃР»Рµ РЅРµРІРµСЂРЅРѕРіРѕ PIN-РєРѕРґР°
+                                 wrong_wait_loop:
+0000f8 e400                          LDI TMP, 0x40
+0000f9 bb0b                          OUT PORTA, TMP
                                  
-0000a6 e081                         LDI MODE, 0x01
+0000fa 3f9f                          CPI WRONG, 0xFF
+0000fb f309                          BREQ correct_loop
                                  
-                                 mode_inc_return:
-0000a7 940e 00b0                    CALL mode_show
-0000a9 9508                         RET
+0000fc cfcb                          RJMP loop
                                  
                                  
-                                 ; Уменьшение номера режима
-                                 ; После режима 1 выбирается режим 3.
-                                 mode_dec:
-0000aa 958a                         DEC MODE
-0000ab f409                         BRNE mode_dec_skip
-                                 
-0000ac e083                         LDI MODE, 0x03
-                                 
-                                 mode_dec_skip:
-0000ad 940e 00b0                    CALL mode_show
-0000af 9508                         RET
+                                 ; Р‘Р»РѕРєРёСЂРѕРІРєР° РїРѕСЃР»Рµ С‚СЂС‘С… РЅРµРІРµСЂРЅС‹С… РїРѕРїС‹С‚РѕРє
+                                 lock:
+0000fd ec00                          LDI TMP, 0xC0
+0000fe bb0b                          OUT PORTA, TMP
+                                 l:
+0000ff cfff                          RJMP l
                                  
                                  
-                                 ; Отображение текущего режима на PD0 и PD1
-                                 ; Старшие биты PORTD сохраняются без изменений.
-                                 mode_show:
-0000b0 b342                         IN  TMP, PORTD
-0000b1 7f4c                         ANDI TMP, 0b11111100
-0000b2 2b48                         OR  TMP, MODE
-0000b3 bb42                         OUT PORTD, TMP
-0000b4 9508                         RET
+                                 ; Р’С‹РІРѕРґ РѕРґРЅРѕР№ С†РёС„СЂС‹ РЅР° СЃРµРјРёСЃРµРіРјРµРЅС‚РЅС‹Р№ РёРЅРґРёРєР°С‚РѕСЂ
+                                 ; Р•СЃР»Рё РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Р№ СЂР°Р·СЂСЏРґ СЃРѕРІРїР°РґР°РµС‚ СЃ DIGIT, РѕРЅ РјРёРіР°РµС‚ СЃ С‡Р°СЃС‚РѕС‚РѕР№ 4 Р“С†
+                                 show_digit:
+000100 17ba                          CP   SHOW, DIGIT
+000101 f429                          BRNE show_num
+                                 
+                                     ; Р¤Р°Р·Р° РІС‹РєР»СЋС‡РµРЅРёСЏ РјРёРіР°СЋС‰РµРіРѕ СЂР°Р·СЂСЏРґР°
+                                     ; BLINK = 0..24 - СЂР°Р·СЂСЏРґ РІС‹РєР»СЋС‡РµРЅ
+                                     ; BLINK = 25..49 - СЂР°Р·СЂСЏРґ РІРєР»СЋС‡РµРЅ
+000102 31f9                          CPI  BLINK, 25
+000103 f41c                          BRGE show_num
+                                 
+000104 2700                          CLR  TMP
+000105 bb0b                          OUT  PORTA, TMP
+000106 9508                          RET
+                                 
+                                 show_num:
+000107 940e 010f                     CALL code_to_portc
+000109 2f0b                          MOV  TMP, SHOW
+00010a bb0b                          OUT  PORTA, TMP
+00010b 0000                          NOP
+00010c 0000                          NOP
+00010d 0000                          NOP
+00010e 9508                          RET
                                  
                                  
-                                 ; Отображение состояния гирлянды на PD4
-                                 state_show:
-0000b5 b342                         IN  TMP, PORTD
-0000b6 7e4f                         ANDI TMP, 0b11101111
+                                 ; РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С†РёС„СЂС‹ 0..9 РІ РєРѕРґ РґР»СЏ PORTC
+                                 code_to_portc:
+00010f 3000                          CPI TMP, 0x00
+000110 f091                          BREQ code0
+000111 3001                          CPI TMP, 0x01
+000112 f099                          BREQ code1
+000113 3002                          CPI TMP, 0x02
+000114 f0a1                          BREQ code2
+000115 3003                          CPI TMP, 0x03
+000116 f0a9                          BREQ code3
+000117 3004                          CPI TMP, 0x04
+000118 f0b1                          BREQ code4
+000119 3005                          CPI TMP, 0x05
+00011a f0b9                          BREQ code5
+00011b 3006                          CPI TMP, 0x06
+00011c f0c1                          BREQ code6
+00011d 3007                          CPI TMP, 0x07
+00011e f0c9                          BREQ code7
+00011f 3008                          CPI TMP, 0x08
+000120 f0d1                          BREQ code8
+000121 3009                          CPI TMP, 0x09
+000122 f0d9                          BREQ code9
                                  
-0000b7 2f07                         MOV R16, STATE
-0000b8 0f00                         LSL R16
-0000b9 0f00                         LSL R16
-0000ba 0f00                         LSL R16
-0000bb 0f00                         LSL R16
+                                 code0:
+000123 ec00                          LDI TMP, 0xC0
+000124 bb05                          OUT PORTC, TMP
+000125 9508                          RET
+                                 code1:
+000126 ef09                          LDI TMP, 0xF9
+000127 bb05                          OUT PORTC, TMP
+000128 9508                          RET
+                                 code2:
+000129 ea04                          LDI TMP, 0xA4
+00012a bb05                          OUT PORTC, TMP
+00012b 9508                          RET
+                                 code3:
+00012c eb00                          LDI TMP, 0xB0
+00012d bb05                          OUT PORTC, TMP
+00012e 9508                          RET
+                                 code4:
+00012f e909                          LDI TMP, 0x99
+000130 bb05                          OUT PORTC, TMP
+000131 9508                          RET
+                                 code5:
+000132 e902                          LDI TMP, 0x92
+000133 bb05                          OUT PORTC, TMP
+000134 9508                          RET
+                                 code6:
+000135 e802                          LDI TMP, 0x82
+000136 bb05                          OUT PORTC, TMP
+000137 9508                          RET
+                                 code7:
+000138 ef08                          LDI TMP, 0xF8
+000139 bb05                          OUT PORTC, TMP
+00013a 9508                          RET
+                                 code8:
+00013b e800                          LDI TMP, 0x80
+00013c bb05                          OUT PORTC, TMP
+00013d 9508                          RET
+                                 code9:
+00013e e900                          LDI TMP, 0x90
+00013f bb05                          OUT PORTC, TMP
+000140 9508                          RET
                                  
-0000bc 2b40                         OR  TMP, R16
-0000bd bb42                         OUT PORTD, TMP
-0000be 9508                         RET
                                  
-                                 
-                                 ; Вычисление значения -Y в прямом коде
-                                 ; Если модуль Y равен нулю, результат тоже 0.
-                                 ; Иначе меняется знаковый бит.
-                                 calc_negative_y:
-0000bf 2f46                         MOV  TMP, VAR_Y
-0000c0 774f                         ANDI TMP, 0x7F
-0000c1 f021                         BREQ calc_negative_y_return
-                                 
-0000c2 e840                         LDI  TMP, 0x80
-0000c3 2f26                         MOV  NEG_VAR_Y, VAR_Y
-0000c4 2724                         EOR  NEG_VAR_Y, TMP
-0000c5 9508                         RET
-                                 
-                                 calc_negative_y_return:
-0000c6 e020                         LDI NEG_VAR_Y, 0x00
-0000c7 9508                         RET
-                                 
-                                 
-                                 ; Прерывание INT0
-                                 ; Переключение режима вперёд и сохранение режима в EEPROM
+                                 ; РџСЂРµСЂС‹РІР°РЅРёРµ INT0
+                                 ; РџРµСЂРµС…РѕРґ Рє РїСЂРµРґС‹РґСѓС‰РµРјСѓ СЂР°Р·СЂСЏРґСѓ PIN-РєРѕРґР°
                                  EXT_INT0:
-0000c8 934f                         PUSH TMP
-0000c9 b74f                         IN   TMP, SREG
-0000ca 934f                         PUSH TMP
+000141 930f                          PUSH TMP
+000142 b70f                          IN   TMP, SREG
+000143 930f                          PUSH TMP
                                  
-0000cb 940e 00a3                    CALL mode_inc
-0000cd 940e 0028                    CALL eeprom_write
+000144 30a1                          CPI  DIGIT, 0x01
+000145 f009                          BREQ int0_return
                                  
-0000cf 914f                         POP  TMP
-0000d0 bf4f                         OUT  SREG, TMP
-0000d1 914f                         POP  TMP
-0000d2 9518                         RETI
+000146 95a6                          LSR  DIGIT
+                                 
+                                 int0_return:
+000147 910f                          POP  TMP
+000148 bf0f                          OUT  SREG, TMP
+000149 910f                          POP  TMP
+00014a 9518                          RETI
                                  
                                  
-                                 ; Прерывание INT1
-                                 ; Переключение режима назад и сохранение режима в EEPROM
+                                 ; РџСЂРµСЂС‹РІР°РЅРёРµ Timer0
+                                 ; Timer0 СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РєР°Р¶РґС‹Рµ 5 РјСЃ
+                                 TIMER0_COMP_ISR:
+00014b 930f                          PUSH TMP
+00014c b70f                          IN   TMP, SREG
+00014d 930f                          PUSH TMP
+00014e 2f0b                          MOV  TMP, SHOW
+00014f 930f                          PUSH TMP
+                                 
+000150 30e2                          CPI  INPDLOOP, 0x02
+000151 f031                          BREQ timer0_exit
+000152 3f9f                          CPI  WRONG, 0xFF
+000153 f021                          BREQ timer0_exit
+                                 
+                                     ; 25 * 5 РјСЃ = 125 РјСЃ
+                                     ; 50 * 5 РјСЃ = 250 РјСЃ, С‚Рѕ РµСЃС‚СЊ С‡Р°СЃС‚РѕС‚Р° РјРёРіР°РЅРёСЏ 4 Р“С†
+000154 95f3                          INC  BLINK
+000155 33f2                          CPI  BLINK, 50
+000156 f008                          BRLO timer0_exit
+000157 e0f0                          LDI  BLINK, 0x00
+                                 
+                                 timer0_exit:
+000158 910f                          POP  TMP
+000159 2fb0                          MOV  SHOW, TMP
+00015a 910f                          POP  TMP
+00015b bf0f                          OUT  SREG, TMP
+00015c 910f                          POP  TMP
+00015d 9518                          RETI
+                                 
+                                 
+                                 ; РџСЂРµСЂС‹РІР°РЅРёРµ Timer2
+                                 ; Timer2 СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РєР°Р¶РґС‹Рµ 10 РјСЃ
+                                 TIMER2_COMP_ISR:
+00015e 930f                          PUSH TMP
+00015f b70f                          IN   TMP, SREG
+000160 930f                          PUSH TMP
+000161 2f0b                          MOV  TMP, SHOW
+000162 930f                          PUSH TMP
+                                 
+000163 30e2                          CPI  INPDLOOP, 0x02
+000164 f049                          BREQ error_mode_timer2
+                                 
+000165 3f9f                          CPI  WRONG, 0xFF
+000166 f039                          BREQ error_mode_timer2
+                                 
+000167 30e0                          CPI  INPDLOOP, 0x00
+000168 f411                          BRNE skip_check
+000169 940e 002e                     CALL check_buttons
+                                 
+                                 skip_check:
+00016b 940e 0015                     CALL calc_delay
+00016d c012                          RJMP timer2_exit
+                                 
+                                 error_mode_timer2:
+                                     ; Timer2 СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РєР°Р¶РґС‹Рµ 10 РјСЃ
+                                     ; 100 * 10 РјСЃ = 1 СЃРµРєСѓРЅРґР°
+00016e 9513                          INC  DEL2SEC
+00016f 3614                          CPI  DEL2SEC, 100
+000170 f479                          BRNE timer2_exit
+                                 
+                                     ; РџСЂРѕС€Р»Р° 1 СЃРµРєСѓРЅРґР°
+000171 e010                          LDI  DEL2SEC, 0x00
+000172 95d3                          INC  DEL250MS
+                                 
+                                     ; 20 * 1 СЃРµРєСѓРЅРґР° = 20 СЃРµРєСѓРЅРґ РѕР¶РёРґР°РЅРёСЏ РїРѕСЃР»Рµ РѕС€РёР±РєРё
+000173 31d4                          CPI  DEL250MS, 20
+000174 f459                          BRNE timer2_exit
+                                 
+                                     ; РћР¶РёРґР°РЅРёРµ Р·Р°РєРѕРЅС‡РµРЅРѕ: СЃР±СЂРѕСЃ РІРІРµРґС‘РЅРЅРѕРіРѕ PIN-РєРѕРґР° Рё РІРѕР·РІСЂР°С‚ Рє РІРІРѕРґСѓ
+000175 2700                          CLR  TMP
+000176 bb0b                          OUT  PORTA, TMP
+                                 
+000177 e0a1                          LDI  DIGIT, 0x01
+000178 e0b1                          LDI  SHOW, 0x01
+                                 
+000179 e050                          LDI  SPIN0, 0x00
+00017a e060                          LDI  SPIN1, 0x00
+00017b e070                          LDI  SPIN2, 0x00
+00017c e080                          LDI  SPIN3, 0x00
+                                 
+00017d e010                          LDI  DEL2SEC, 0x00
+00017e e0d0                          LDI  DEL250MS, 0x00
+00017f e0e0                          LDI  INPDLOOP, 0x00
+                                 
+                                 timer2_exit:
+000180 910f                          POP  TMP
+000181 2fb0                          MOV  SHOW, TMP
+000182 910f                          POP  TMP
+000183 bf0f                          OUT  SREG, TMP
+000184 910f                          POP  TMP
+000185 9518                          RETI
+                                 
+                                 
+                                 ; РџСЂРµСЂС‹РІР°РЅРёРµ INT1
+                                 ; РџРµСЂРµС…РѕРґ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЂР°Р·СЂСЏРґСѓ.
+                                 ; Р•СЃР»Рё РІС‹Р±СЂР°РЅ РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·СЂСЏРґ, РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїСЂРѕРІРµСЂРєР° PIN-РєРѕРґР°.
                                  EXT_INT1:
-0000d3 934f                         PUSH TMP
-0000d4 b74f                         IN   TMP, SREG
-0000d5 934f                         PUSH TMP
+000186 930f                          PUSH TMP
+000187 b70f                          IN   TMP, SREG
+000188 930f                          PUSH TMP
                                  
-0000d6 940e 00aa                    CALL mode_dec
-0000d8 940e 0028                    CALL eeprom_write
+000189 30a8                          CPI  DIGIT, 0x08
+00018a f029                          BREQ call_compare_pins
                                  
-0000da 914f                         POP  TMP
-0000db bf4f                         OUT  SREG, TMP
-0000dc 914f                         POP  TMP
+00018b 0faa                          LSL  DIGIT
+                                 
+                                 int1_return:
+00018c 910f                          POP  TMP
+00018d bf0f                          OUT  SREG, TMP
+00018e 910f                          POP  TMP
+00018f 9518                          RETI
+                                 
+                                 call_compare_pins:
+000190 940e 00e4                     CALL compare_pins
 
 
 RESOURCE USE INFORMATION
@@ -1250,38 +1493,38 @@ counted separately from r26..r31 here.
 "ATmega32" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  11 r17:   4 r18:   5 r19:   7 r20:  69 
-r21:   0 r22:   6 r23:   6 r24:  15 r25:   7 r26:   4 r27:   0 r28:   0 
-r29:   2 r30:   2 r31:   0 
-Registers used: 12 out of 35 (34.3%)
+r13:   0 r14:   0 r15:   0 r16: 137 r17:  12 r18:   3 r19:   3 r20:   3 
+r21:  11 r22:  11 r23:  11 r24:  11 r25:   8 r26:  15 r27:  11 r28:   3 
+r29:  11 r30:  11 r31:   5 
+Registers used: 16 out of 35 (45.7%)
 
 "ATmega32" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   7 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :  10 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :  12 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :  16 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   6 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :  17 cpse  :   0 dec   :   3 eor   :   2 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :  13 inc   :   2 jmp   :   3 
-ld    :   0 ldd   :   0 ldi   :  26 lds   :   0 lpm   :   0 lsl   :   4 
-lsr   :   0 mov   :  10 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   6 or    :   2 ori   :   0 out   :  23 pop   :   4 
-push  :   4 rcall :   0 ret   :  11 reti  :   2 rjmp  :  12 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   3 sbic  :   2 sbis  :   0 
+andi  :   2 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :  35 brge  :   2 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
+brne  :  18 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :  10 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   4 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   5 cpc   :   0 
+cpi   :  50 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :  10 inc   :  10 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  84 lds   :   0 lpm   :   0 lsl   :   4 
+lsr   :   1 mov   :  10 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   3 or    :   0 ori   :   0 out   :  45 pop   :  10 
+push  :  10 rcall :   0 ret   :  37 reti  :   4 rjmp  :  11 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   4 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   1 sen   :   0 ser   :   1 ses   :   0 set   :   0 sev   :   0 
+sei   :   1 sen   :   0 ser   :   2 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 27 out of 113 (23.9%)
+Instructions used: 26 out of 113 (23.0%)
 
 "ATmega32" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0001bc    444      0    444   32768   1.4%
+[.cseg] 0x000000 0x000326    774      0    774   32768   2.4%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
-Assembly complete, 0 errors, 1 warnings
+Assembly complete, 0 errors, 6 warnings
