@@ -1,18 +1,18 @@
 <ASSEMBLER_INFO>
  <VERSION>2.2.8</VERSION>
  <DEVICE>"ATmega32"</DEVICE>
- <WORKING_DIR>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\Debug</WORKING_DIR>
+ <WORKING_DIR>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\Debug</WORKING_DIR>
  <INCLUDE_PATH>
-  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
-  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR>C:/Programs\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Programs\7.0\toolchain\avr8\avrassembler\Include</DIR>
   <DIR></DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</SOURCE_FILE>
+ <SOURCE_FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
-  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc</FILE>
+  <FILE>C:/Programs\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m32def.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\Debug\AssemblerApplication1.obj</FILE>
+  <FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\Debug\AssemblerApplication1.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
   <FILE>AssemblerApplication1.hex</FILE>
@@ -22,64 +22,64 @@
   <FILE>AssemblerApplication1.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>248</LINE></reset>
-  <EXT_INT0><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>519</LINE></EXT_INT0>
-  <EXT_INT1><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>632</LINE></EXT_INT1>
-  <TIMER2_COMP_ISR><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>568</LINE></TIMER2_COMP_ISR>
-  <TIMER0_COMP_ISR><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>538</LINE></TIMER0_COMP_ISR>
-  <calc_delay><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>32</LINE></calc_delay>
-  <reset_delay><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>71</LINE></reset_delay>
-  <pdsdelay><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>54</LINE></pdsdelay>
-  <pdsloop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>64</LINE></pdsloop>
-  <increase_digit><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>114</LINE></increase_digit>
-  <decrease_digit><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>162</LINE></decrease_digit>
-  <return><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>77</LINE></return>
-  <check_buttons><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>84</LINE></check_buttons>
-  <check_inc><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>98</LINE></check_inc>
-  <check_dec><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>105</LINE></check_dec>
-  <increase_spin0><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>124</LINE></increase_spin0>
-  <increase_spin1><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>133</LINE></increase_spin1>
-  <increase_spin2><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>142</LINE></increase_spin2>
-  <increase_spin3><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>151</LINE></increase_spin3>
-  <increase_spin0_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>129</LINE></increase_spin0_loop>
-  <increase_spin1_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>138</LINE></increase_spin1_loop>
-  <increase_spin2_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>147</LINE></increase_spin2_loop>
-  <increase_spin3_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>156</LINE></increase_spin3_loop>
-  <decrease_spin0><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>172</LINE></decrease_spin0>
-  <decrease_spin1><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>181</LINE></decrease_spin1>
-  <decrease_spin2><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>190</LINE></decrease_spin2>
-  <decrease_spin3><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>199</LINE></decrease_spin3>
-  <decrease_spin0_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>177</LINE></decrease_spin0_loop>
-  <decrease_spin1_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>186</LINE></decrease_spin1_loop>
-  <decrease_spin2_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>195</LINE></decrease_spin2_loop>
-  <decrease_spin3_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>204</LINE></decrease_spin3_loop>
-  <eeprom_read><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>211</LINE></eeprom_read>
-  <loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>338</LINE></loop>
-  <wrong_wait_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>408</LINE></wrong_wait_loop>
-  <correct_loop><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>366</LINE></correct_loop>
-  <show_digit><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>428</LINE></show_digit>
-  <compare_pins><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>377</LINE></compare_pins>
-  <wrong_pin><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>393</LINE></wrong_pin>
-  <lock><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>419</LINE></lock>
-  <l><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>422</LINE></l>
-  <show_num><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>442</LINE></show_num>
-  <code_to_portc><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>453</LINE></code_to_portc>
-  <code0><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>475</LINE></code0>
-  <code1><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>479</LINE></code1>
-  <code2><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>483</LINE></code2>
-  <code3><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>487</LINE></code3>
-  <code4><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>491</LINE></code4>
-  <code5><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>495</LINE></code5>
-  <code6><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>499</LINE></code6>
-  <code7><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>503</LINE></code7>
-  <code8><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>507</LINE></code8>
-  <code9><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>511</LINE></code9>
-  <int0_return><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>529</LINE></int0_return>
-  <timer0_exit><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>557</LINE></timer0_exit>
-  <error_mode_timer2><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>589</LINE></error_mode_timer2>
-  <skip_check><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>585</LINE></skip_check>
-  <timer2_exit><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>620</LINE></timer2_exit>
-  <call_compare_pins><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>648</LINE></call_compare_pins>
-  <int1_return><FILE>D:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>642</LINE></int1_return>
+  <reset><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>248</LINE></reset>
+  <EXT_INT0><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>516</LINE></EXT_INT0>
+  <EXT_INT1><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>632</LINE></EXT_INT1>
+  <TIMER2_COMP_ISR><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>568</LINE></TIMER2_COMP_ISR>
+  <TIMER0_COMP_ISR><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>538</LINE></TIMER0_COMP_ISR>
+  <calc_delay><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>32</LINE></calc_delay>
+  <reset_delay><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>71</LINE></reset_delay>
+  <pdsdelay><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>54</LINE></pdsdelay>
+  <pdsloop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>64</LINE></pdsloop>
+  <increase_digit><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>114</LINE></increase_digit>
+  <decrease_digit><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>162</LINE></decrease_digit>
+  <return><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>77</LINE></return>
+  <check_buttons><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>84</LINE></check_buttons>
+  <check_inc><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>98</LINE></check_inc>
+  <check_dec><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>105</LINE></check_dec>
+  <increase_spin0><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>124</LINE></increase_spin0>
+  <increase_spin1><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>133</LINE></increase_spin1>
+  <increase_spin2><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>142</LINE></increase_spin2>
+  <increase_spin3><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>151</LINE></increase_spin3>
+  <increase_spin0_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>129</LINE></increase_spin0_loop>
+  <increase_spin1_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>138</LINE></increase_spin1_loop>
+  <increase_spin2_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>147</LINE></increase_spin2_loop>
+  <increase_spin3_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>156</LINE></increase_spin3_loop>
+  <decrease_spin0><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>172</LINE></decrease_spin0>
+  <decrease_spin1><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>181</LINE></decrease_spin1>
+  <decrease_spin2><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>190</LINE></decrease_spin2>
+  <decrease_spin3><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>199</LINE></decrease_spin3>
+  <decrease_spin0_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>177</LINE></decrease_spin0_loop>
+  <decrease_spin1_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>186</LINE></decrease_spin1_loop>
+  <decrease_spin2_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>195</LINE></decrease_spin2_loop>
+  <decrease_spin3_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>204</LINE></decrease_spin3_loop>
+  <eeprom_read><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>211</LINE></eeprom_read>
+  <loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>334</LINE></loop>
+  <wrong_wait_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>404</LINE></wrong_wait_loop>
+  <correct_loop><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>362</LINE></correct_loop>
+  <show_digit><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>424</LINE></show_digit>
+  <compare_pins><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>373</LINE></compare_pins>
+  <wrong_pin><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>389</LINE></wrong_pin>
+  <lock><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>415</LINE></lock>
+  <l><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>418</LINE></l>
+  <show_num><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>438</LINE></show_num>
+  <code_to_portc><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>451</LINE></code_to_portc>
+  <code0><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>473</LINE></code0>
+  <code1><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>477</LINE></code1>
+  <code2><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>481</LINE></code2>
+  <code3><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>485</LINE></code3>
+  <code4><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>489</LINE></code4>
+  <code5><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>493</LINE></code5>
+  <code6><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>497</LINE></code6>
+  <code7><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>501</LINE></code7>
+  <code8><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>505</LINE></code8>
+  <code9><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>509</LINE></code9>
+  <int0_return><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>529</LINE></int0_return>
+  <timer0_exit><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>557</LINE></timer0_exit>
+  <error_mode_timer2><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>589</LINE></error_mode_timer2>
+  <skip_check><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>585</LINE></skip_check>
+  <timer2_exit><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>620</LINE></timer2_exit>
+  <call_compare_pins><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>647</LINE></call_compare_pins>
+  <int1_return><FILE>C:\Labs\ACBT\Lab3\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>641</LINE></int1_return>
  </LABELS>
 </ASSEMBLER_INFO>

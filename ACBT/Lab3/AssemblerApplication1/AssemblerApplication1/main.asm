@@ -27,8 +27,6 @@
     RJMP TIMER0_COMP_ISR
 
 ; Обработка удержания кнопок PD0 и PD1
-; После первого нажатия ждём 2 секунды.
-; Затем при удержании выполняется автоповтор каждые 250 мс.
 calc_delay:
     IN   TMP, PIND
     ANDI TMP, 0x03
@@ -82,7 +80,6 @@ return:
 ; PD0 - увеличение текущей цифры
 ; PD1 - уменьшение текущей цифры
 check_buttons:
-    ; Если DEL2SEC не равен нулю, значит кнопка уже была обработана
     CPI  DEL2SEC, 0x00
     BRNE return
 
@@ -209,7 +206,6 @@ decrease_spin3_loop:
 ; Чтение PIN-кода из EEPROM
 ; PIN хранится по адресам 0x00, 0x01, 0x02, 0x03
 eeprom_read:
-    ; Чтение PIN0
     LDI  TMP, 0x00
     OUT  EEARH, TMP
     LDI  TMP, 0x00
@@ -217,7 +213,6 @@ eeprom_read:
     SBI  EECR, EERE
     IN   PIN0, EEDR
 
-    ; Чтение PIN1
     LDI  TMP, 0x00
     OUT  EEARH, TMP
     LDI  TMP, 0x01
@@ -225,7 +220,6 @@ eeprom_read:
     SBI  EECR, EERE
     IN   PIN1, EEDR
 
-    ; Чтение PIN2
     LDI  TMP, 0x00
     OUT  EEARH, TMP
     LDI  TMP, 0x02
@@ -233,7 +227,6 @@ eeprom_read:
     SBI  EECR, EERE
     IN   PIN2, EEDR
 
-    ; Чтение PIN3
     LDI  TMP, 0x00
     OUT  EEARH, TMP
     LDI  TMP, 0x03
@@ -286,14 +279,10 @@ reset:
     LDI  SPIN1, 0x00
     LDI  SPIN2, 0x00
     LDI  SPIN3, 0x00
-    LDI  PIN0, 0x00
-    LDI  PIN1, 0x00
-    LDI  PIN2, 0x00
-    LDI  PIN3, 0x00
     LDI  BLINK, 0x00
 
     ; Чтение правильного PIN-кода из EEPROM
-    ;CALL eeprom_read
+    CALL eeprom_read
 
     ; Настройка внешних прерываний INT0 и INT1
     ; INT0 и INT1 срабатывают по переднему фронту (0 -> 1)
@@ -334,7 +323,6 @@ reset:
 
 
 ; Основной цикл программы
-; Поочерёдно выводит четыре цифры PIN-кода на индикатор
 loop:
     CPI INPDLOOP, 0x02
     BREQ wrong_wait_loop
@@ -362,7 +350,6 @@ loop:
 
 
 ; Режим правильного ввода PIN-кода
-; На индикатор выводится 9999, включается PA7
 correct_loop:
     LDI  SPIN0, 0x09
     LDI  SPIN1, 0x09
@@ -446,6 +433,8 @@ show_num:
     NOP
     NOP
     NOP
+    CLR  TMP
+    OUT  PORTA, TMP
     RET
 
 
@@ -473,46 +462,45 @@ code_to_portc:
     BREQ code9
 
 code0:
-    LDI TMP, 0xC0
+    LDI TMP, 0x3F
     OUT PORTC, TMP
     RET
 code1:
-    LDI TMP, 0xF9
+    LDI TMP, 0x06
     OUT PORTC, TMP
     RET
 code2:
-    LDI TMP, 0xA4
+    LDI TMP, 0x5B
     OUT PORTC, TMP
     RET
 code3:
-    LDI TMP, 0xB0
+    LDI TMP, 0x4F
     OUT PORTC, TMP
     RET
 code4:
-    LDI TMP, 0x99
+    LDI TMP, 0x66
     OUT PORTC, TMP
     RET
 code5:
-    LDI TMP, 0x92
+    LDI TMP, 0x6D
     OUT PORTC, TMP
     RET
 code6:
-    LDI TMP, 0x82
+    LDI TMP, 0x7D
     OUT PORTC, TMP
     RET
 code7:
-    LDI TMP, 0xF8
+    LDI TMP, 0x07
     OUT PORTC, TMP
     RET
 code8:
-    LDI TMP, 0x80
+    LDI TMP, 0x7F
     OUT PORTC, TMP
     RET
 code9:
-    LDI TMP, 0x90
+    LDI TMP, 0x6F
     OUT PORTC, TMP
     RET
-
 
 ; Прерывание INT0
 ; Переход к предыдущему разряду PIN-кода
@@ -521,6 +509,9 @@ EXT_INT0:
     IN   TMP, SREG
     PUSH TMP
 
+	CPI  TMP, 103
+	BRGE int0_return
+	LDI  TMP, 103
     CPI  DIGIT, 0x01
     BREQ int0_return
 
@@ -638,7 +629,6 @@ EXT_INT1:
     BREQ call_compare_pins
 
     LSL  DIGIT
-
 int1_return:
     POP  TMP
     OUT  SREG, TMP
